@@ -1,7 +1,7 @@
 use crate::matrix;
 
 use matrix::Matrix;
-use std::fmt::Display;
+use std::{fmt::Display, ops::Add};
 
 #[derive(Clone, Debug)]
 pub struct Vector<K> {
@@ -44,7 +44,16 @@ impl<K> Vector<K> {
         //     data: vec![self.data],
         // }
     }
-    pub fn add(&mut self, v: &Vector<K>) {}
+    pub fn add(&mut self, v: &Vector<K>)
+    where
+        K: std::ops::Add,
+        K: Clone,
+    {
+        self.data
+            .iter_mut()
+            .zip(v.data.into_iter())
+            .map(|(a, b)| a + b);
+    }
     pub fn sub(&mut self, v: &Vector<K>) {}
     pub fn scl(&mut self, a: K) {}
 }
