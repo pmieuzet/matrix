@@ -13,9 +13,9 @@ pub struct Vector<K> {
 }
 
 //To print a vector on the standart outpout
-impl<K> Display for Vector<K> {
+impl<K: std::fmt::Debug> Display for Vector<K> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self)
+        write!(f, "{:?}", self)
     }
 }
 

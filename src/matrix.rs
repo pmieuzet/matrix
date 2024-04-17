@@ -1,9 +1,8 @@
 use crate::vector;
 
 use std::{
-    collections::binary_heap::Iter,
     fmt::Display,
-    ops::{Add, AddAssign, Mul, Sub},
+    ops::{Add, Mul, Sub},
 };
 use vector::Vector;
 
@@ -13,11 +12,14 @@ pub struct Matrix<K> {
     pub columns: usize,
     pub data: Vec<Vec<K>>,
 }
-impl<K> Display for Matrix<K> {
+
+//To print a matrix on the standart input
+impl<K: std::fmt::Debug> Display for Matrix<K> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self)
+        write!(f, "{:?}", self)
     }
 }
+
 impl<K: Clone, const N: usize, const U: usize> From<[[K; N]; U]> for Matrix<K> {
     fn from(data: [[K; N]; U]) -> Self {
         let mut matrice = Vec::new();
@@ -27,6 +29,7 @@ impl<K: Clone, const N: usize, const U: usize> From<[[K; N]; U]> for Matrix<K> {
         Self::new(matrice, N, U)
     }
 }
+
 impl<K> Matrix<K> {
     pub fn new(data: Vec<Vec<K>>, rows: usize, columns: usize) -> Matrix<K> {
         Matrix {
@@ -35,15 +38,23 @@ impl<K> Matrix<K> {
             data,
         }
     }
+
+    //To return the size of a matrix
     pub fn size(&self) -> usize {
         self.columns * self.rows
     }
+
+    //To return the shape of a matrix
     pub fn shape(&self) -> (usize, usize) {
         (self.rows, self.columns)
     }
+
+    //To tell if a matrix is square
     pub fn is_square(&self) -> bool {
         self.rows == self.columns
     }
+
+    //To reshape a matrix into a vector
     pub fn into_vector(self) -> Vector<K> {
         let vector = self.data.into_iter().flatten().collect::<Vec<K>>();
         Vector {
@@ -51,6 +62,8 @@ impl<K> Matrix<K> {
             data: vector,
         }
     }
+
+    //Compute the addition of two matrix
     pub fn addition(&mut self, v: &Matrix<K>)
     where
         K: std::ops::AddAssign,
@@ -62,6 +75,8 @@ impl<K> Matrix<K> {
             }
         }
     }
+
+    //Compute the subtraction of a matrix by another matrix
     pub fn subtraction(&mut self, v: &Matrix<K>)
     where
         K: std::ops::SubAssign,
@@ -73,6 +88,8 @@ impl<K> Matrix<K> {
             }
         }
     }
+
+    //Compute the scaling of a vector by a scalar
     pub fn scl(&mut self, a: K)
     where
         K: std::ops::MulAssign,
@@ -126,12 +143,12 @@ impl<K: Sub<Output = K> + Clone> Sub for Matrix<K> {
 
 impl<K: Mul<Output = K> + Clone> Mul<K> for Matrix<K> {
     type Output = Self;
-    fn mul(self, rhs: K) -> Self::Output {
+    fn mul(self, scalar: K) -> Self::Output {
         let mut data = vec![];
         for item in self.data {
             let mut vector = vec![];
             for x in item.into_iter() {
-                vector.push(x * rhs.clone());
+                vector.push(x * scalar.clone());
             }
             data.push(vector);
         }
