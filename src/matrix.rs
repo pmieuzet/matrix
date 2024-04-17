@@ -1,6 +1,10 @@
 use crate::vector;
 
-use std::fmt::Display;
+use std::{
+    collections::binary_heap::Iter,
+    fmt::Display,
+    ops::{Add, AddAssign, Mul, Sub},
+};
 use vector::Vector;
 
 #[derive(Clone, Debug)]
@@ -47,7 +51,94 @@ impl<K> Matrix<K> {
             data: vector,
         }
     }
-    pub fn add(&mut self, v: &Matrix<K>) {}
-    pub fn sub(&mut self, v: &Matrix<K>) {}
-    pub fn scl(&mut self, a: K) {}
+    pub fn addition(&mut self, v: &Matrix<K>)
+    where
+        K: std::ops::AddAssign,
+        K: Clone,
+    {
+        for i in 0..self.rows {
+            for j in 0..self.columns {
+                self.data[i][j] += v.data[i][j].clone();
+            }
+        }
+    }
+    pub fn subtraction(&mut self, v: &Matrix<K>)
+    where
+        K: std::ops::SubAssign,
+        K: Clone,
+    {
+        for i in 0..self.rows {
+            for j in 0..self.columns {
+                self.data[i][j] -= v.data[i][j].clone();
+            }
+        }
+    }
+    pub fn scl(&mut self, a: K)
+    where
+        K: std::ops::MulAssign,
+        K: Clone,
+    {
+        for item in &mut self.data {
+            for x in item.iter_mut() {
+                *x *= a.clone();
+            }
+        }
+    }
+}
+
+impl<K: Add<Output = K> + Clone> Add for Matrix<K> {
+    type Output = Self;
+    fn add(self, rhs: Self) -> Self::Output {
+        let mut data = vec![];
+        for i in 0..self.rows {
+            let mut vector = vec![];
+            for j in 0..self.columns {
+                vector.push(self.data[i][j].clone() + rhs.data[i][j].clone())
+            }
+            data.push(vector);
+        }
+        Self {
+            rows: self.rows,
+            columns: self.columns,
+            data,
+        }
+    }
+}
+
+impl<K: Sub<Output = K> + Clone> Sub for Matrix<K> {
+    type Output = Self;
+    fn sub(self, rhs: Self) -> Self::Output {
+        let mut data = vec![];
+        for i in 0..self.rows {
+            let mut vector = vec![];
+            for j in 0..self.columns {
+                vector.push(self.data[i][j].clone() - rhs.data[i][j].clone())
+            }
+            data.push(vector);
+        }
+        Self {
+            rows: self.rows,
+            columns: self.columns,
+            data,
+        }
+    }
+}
+
+impl<K: Mul<Output = K> + Clone> Mul<K> for Matrix<K> {
+    type Output = Self;
+    fn mul(self, rhs: K) -> Self::Output {
+        let mut data = vec![];
+        for item in self.data {
+            let mut vector = vec![];
+            for x in item.into_iter() {
+                vector.push(x * rhs.clone());
+            }
+            data.push(vector);
+        }
+        Self {
+            rows: self.rows,
+            columns: self.columns,
+            data,
+        }
+    }
 }
