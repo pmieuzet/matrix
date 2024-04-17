@@ -20,11 +20,11 @@ impl<K: std::fmt::Debug> Display for Matrix<K> {
     }
 }
 
-impl<K: Clone, const N: usize, const U: usize> From<[[K; N]; U]> for Matrix<K> {
+impl<K, const N: usize, const U: usize> From<[[K; N]; U]> for Matrix<K> {
     fn from(data: [[K; N]; U]) -> Self {
         let mut matrice = Vec::new();
         for item in data {
-            matrice.push(item.to_vec());
+            matrice.push(Vec::from(item));
         }
         Self::new(matrice, N, U)
     }
@@ -62,58 +62,21 @@ impl<K> Matrix<K> {
             data: vector,
         }
     }
-
-    //Compute the addition of two matrix
-    pub fn addition(&mut self, v: &Matrix<K>)
-    where
-        K: std::ops::AddAssign,
-        K: Clone,
-    {
-        for i in 0..self.rows {
-            for j in 0..self.columns {
-                self.data[i][j] += v.data[i][j].clone();
-            }
-        }
-    }
-
-    //Compute the subtraction of a matrix by another matrix
-    pub fn subtraction(&mut self, v: &Matrix<K>)
-    where
-        K: std::ops::SubAssign,
-        K: Clone,
-    {
-        for i in 0..self.rows {
-            for j in 0..self.columns {
-                self.data[i][j] -= v.data[i][j].clone();
-            }
-        }
-    }
-
-    //Compute the scaling of a vector by a scalar
-    pub fn scl(&mut self, a: K)
-    where
-        K: std::ops::MulAssign,
-        K: Clone,
-    {
-        for item in &mut self.data {
-            for x in item.iter_mut() {
-                *x *= a.clone();
-            }
-        }
-    }
 }
 
+/// Compute the addition of two matrix
 impl<K: Add<Output = K> + Clone> Add for Matrix<K> {
     type Output = Self;
     fn add(self, rhs: Self) -> Self::Output {
         let mut data = vec![];
-        for i in 0..self.rows {
+        for (vec1, vec2) in self.data.into_iter().zip(rhs.data.into_iter()) {
             let mut vector = vec![];
-            for j in 0..self.columns {
-                vector.push(self.data[i][j].clone() + rhs.data[i][j].clone())
+            for (a, b) in vec1.into_iter().zip(vec2.into_iter()) {
+                vector.push(a + b);
             }
             data.push(vector);
         }
+
         Self {
             rows: self.rows,
             columns: self.columns,
@@ -122,17 +85,19 @@ impl<K: Add<Output = K> + Clone> Add for Matrix<K> {
     }
 }
 
+/// Compute the subtraction of a matrix by another matrix
 impl<K: Sub<Output = K> + Clone> Sub for Matrix<K> {
     type Output = Self;
     fn sub(self, rhs: Self) -> Self::Output {
         let mut data = vec![];
-        for i in 0..self.rows {
+        for (vec1, vec2) in self.data.into_iter().zip(rhs.data.into_iter()) {
             let mut vector = vec![];
-            for j in 0..self.columns {
-                vector.push(self.data[i][j].clone() - rhs.data[i][j].clone())
+            for (a, b) in vec1.into_iter().zip(vec2.into_iter()) {
+                vector.push(a - b);
             }
             data.push(vector);
         }
+
         Self {
             rows: self.rows,
             columns: self.columns,
@@ -141,6 +106,7 @@ impl<K: Sub<Output = K> + Clone> Sub for Matrix<K> {
     }
 }
 
+/// Compute the scaling of a vector by a scalar
 impl<K: Mul<Output = K> + Clone> Mul<K> for Matrix<K> {
     type Output = Self;
     fn mul(self, scalar: K) -> Self::Output {

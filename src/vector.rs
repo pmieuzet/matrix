@@ -12,16 +12,16 @@ pub struct Vector<K> {
     pub data: Vec<K>,
 }
 
-//To print a vector on the standart outpout
+/// To print a vector on the standart outpout
 impl<K: std::fmt::Debug> Display for Vector<K> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{:?}", self)
     }
 }
 
-impl<K: Clone, const N: usize> From<[K; N]> for Vector<K> {
+impl<K, const N: usize> From<[K; N]> for Vector<K> {
     fn from(data: [K; N]) -> Self {
-        Self::new(data.to_vec(), N)
+        Self::new(Vec::from(data), N)
     }
 }
 
@@ -30,12 +30,12 @@ impl<K> Vector<K> {
         Vector { size, data }
     }
 
-    //To return the size of a vector
+    /// To return the size of a vector
     pub fn size(&self) -> usize {
         self.size
     }
 
-    //To reshape a vector into a matrix
+    /// To reshape a vector into a matrix
     pub fn into_matrix(self) -> Matrix<K> {
         Matrix {
             rows: 1,
@@ -43,59 +43,9 @@ impl<K> Vector<K> {
             data: vec![self.data],
         }
     }
-
-    //Compute the addition of two vectors
-    pub fn addition(&mut self, v: &Vector<K>)
-    where
-        K: std::ops::Add<Output = K>,
-        K: Clone,
-    {
-        if self.size != v.size {
-            eprint!("Error: Can't add two vectors. They are not the same size.");
-            return;
-        }
-
-        self.data = self
-            .data
-            .iter_mut()
-            .zip(v.data.iter())
-            .map(|(a, b)| a.clone() + b.clone())
-            .collect::<Vec<K>>();
-    }
-
-    //Compute the subtraction of a vector by another vector
-    pub fn subtraction(&mut self, v: &Vector<K>)
-    where
-        K: std::ops::Sub<Output = K>,
-        K: Clone,
-    {
-        if self.size != v.size {
-            eprint!("Error: Can't subtract two vectors. They are not the same size.");
-            return;
-        }
-
-        self.data = self
-            .data
-            .iter_mut()
-            .zip(v.data.iter())
-            .map(|(a, b)| a.clone() - b.clone())
-            .collect::<Vec<K>>();
-    }
-
-    //Compute the scaling of a vector by a scalar
-    pub fn scl(&mut self, a: K)
-    where
-        K: std::ops::Mul<Output = K>,
-        K: Clone,
-    {
-        self.data = self
-            .data
-            .iter_mut()
-            .map(|x| x.clone() * a.clone())
-            .collect::<Vec<K>>()
-    }
 }
 
+/// Compute the addition of two vectors
 impl<K: Add<Output = K>> Add for Vector<K> {
     type Output = Self;
     fn add(self, rhs: Self) -> Self::Output {
@@ -112,6 +62,7 @@ impl<K: Add<Output = K>> Add for Vector<K> {
     }
 }
 
+/// Compute the subtraction of a vector by another vector
 impl<K: Sub<Output = K>> Sub for Vector<K> {
     type Output = Self;
     fn sub(self, rhs: Self) -> Self::Output {
@@ -128,6 +79,7 @@ impl<K: Sub<Output = K>> Sub for Vector<K> {
     }
 }
 
+/// Compute the scaling of a vector by a scalar
 impl<K: Mul<Output = K> + Clone> Mul<K> for Vector<K> {
     type Output = Self;
     fn mul(self, scalar: K) -> Self::Output {

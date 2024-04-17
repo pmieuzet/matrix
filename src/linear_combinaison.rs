@@ -1,29 +1,19 @@
-use std::ops::Mul;
+use std::ops::{Add, Mul};
 
-use crate::vector::Vector;
+use crate::{errors::Error, vector::Vector};
 
-pub fn linear_combination<K>(u: &[Vector<K>], coefs: &[K]) -> Vector<K>
+pub fn linear_combination<K>(u: &[Vector<K>], coefs: &[K]) -> Result<Vector<K>, Error>
 where
-    K: std::ops::AddAssign + Clone + std::ops::Mul<Output = K>,
+    K: std::ops::AddAssign + Clone + std::ops::Mul<Output = K> + std::ops::Add<Output = K>,
 {
-    let x = u
-        .iter()
-        .zip(coefs.iter())
-        .map(|(a, coef)| (*a).clone().mul((*coef).clone()));
-
-    let mut data = Vec::<K>::new();
-    for item in x.into_iter() {
-        for i in 0..item.size {
-            if data.len() == i {
-                data.push(item.data[i].clone());
-            } else {
-                data[i] += item.data[i].clone();
-            }
-        }
+    if u.len() != coefs.len() {
+        return Err(Error::NotSameSize);
     }
 
-    Vector {
-        size: data.len(),
-        data,
-    }
+    u.to_owned()
+        .into_iter()
+        .zip(coefs.to_owned().into_iter())
+        .map(|(a, coef)| a.mul(coef))
+        .reduce(|acc, a| acc.add(a))
+        .ok_or(Error::EmptyVector)
 }
