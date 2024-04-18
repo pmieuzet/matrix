@@ -4,4 +4,6 @@ pub enum Error {
     NotSameSize,
     #[error("Error: The vector is empty.")]
     EmptyVector,
+    #[error("Error: The scalar is a wrong range.")]
+    WrongRangeScalar,
 }

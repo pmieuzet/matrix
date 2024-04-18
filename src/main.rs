@@ -3,10 +3,10 @@ use std::ops::{Add, Mul, Sub};
 use matrix::Matrix;
 use vector::Vector;
 
-use crate::linear_combinaison::linear_combination;
+use crate::linear_algorithms::{lerp, linear_combination};
 
 mod errors;
-mod linear_combinaison;
+mod linear_algorithms;
 mod matrix;
 mod vector;
 
@@ -79,4 +79,40 @@ fn main() {
         // [10.][0.][230.]
     }
     println!("\n\n---------------EX02---------------\n");
+    {
+        match lerp(0., 1., 0.) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        // 0.0
+        match lerp(0., 1., 1.) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        // 1.0
+        match lerp(0., 1., 0.5) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        // 0.5
+        match lerp(21., 42., 0.3) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        // 27.3
+        match lerp(Vector::from([2., 1.]), Vector::from([4., 2.]), 0.3) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        // [2.6][1.3]
+        match lerp(
+            Matrix::from([[2., 1.], [3., 4.]]),
+            Matrix::from([[20., 10.], [30., 40.]]),
+            0.5,
+        ) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        // [[11., 5.5][16.5, 22.]]
+    }
 }

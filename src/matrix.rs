@@ -2,7 +2,7 @@ use crate::vector;
 
 use std::{
     fmt::Display,
-    ops::{Add, Mul, Sub},
+    ops::{Add, Div, Mul, Sub},
 };
 use vector::Vector;
 
@@ -115,6 +115,25 @@ impl<K: Mul<Output = K> + Clone> Mul<K> for Matrix<K> {
             let mut vector = vec![];
             for x in item.into_iter() {
                 vector.push(x * scalar.clone());
+            }
+            data.push(vector);
+        }
+        Self {
+            rows: self.rows,
+            columns: self.columns,
+            data,
+        }
+    }
+}
+
+impl<K: Div<Output = K> + Clone> Div<K> for Matrix<K> {
+    type Output = Self;
+    fn div(self, rhs: K) -> Self::Output {
+        let mut data = vec![];
+        for item in self.data {
+            let mut vector = vec![];
+            for x in item.into_iter() {
+                vector.push(x / rhs.clone());
             }
             data.push(vector);
         }

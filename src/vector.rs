@@ -3,7 +3,7 @@ use crate::matrix;
 use matrix::Matrix;
 use std::{
     fmt::Display,
-    ops::{Add, Mul, Sub},
+    ops::{Add, Div, Mul, Sub},
 };
 
 #[derive(Clone, Debug)]
@@ -87,6 +87,21 @@ impl<K: Mul<Output = K> + Clone> Mul<K> for Vector<K> {
             .data
             .into_iter()
             .map(|x| x * scalar.clone())
+            .collect::<Vec<K>>();
+        Self {
+            size: data.len(),
+            data,
+        }
+    }
+}
+
+impl<K: Div<Output = K> + Clone> Div<K> for Vector<K> {
+    type Output = Self;
+    fn div(self, scalar: K) -> Self::Output {
+        let data = self
+            .data
+            .into_iter()
+            .map(|x| x / scalar.clone())
             .collect::<Vec<K>>();
         Self {
             size: data.len(),
