@@ -49,6 +49,10 @@ impl<K> Vector<K> {
     where
         K: Mul<Output = K> + Add<Output = K> + Clone,
     {
+        if self.size != v.size {
+            return Err(Error::NotSameSize);
+        }
+
         self.to_owned()
             .data
             .into_iter()
@@ -57,6 +61,15 @@ impl<K> Vector<K> {
             .reduce(|acc, a| acc + a)
             .ok_or(Error::EmptyVector)
     }
+}
+
+impl<V: Add<f32, Output = f32>> Vector<V> {
+    //TODO implement abs to V
+    fn norm_1(&self) -> f32 {
+        self.to_owned().data.into_iter().fold(0., |acc, a| a + acc)
+    }
+    fn norm(&mut self) -> f32 {}
+    fn norm_inf(&mut self) -> f32 {}
 }
 
 /// Compute the addition of two vectors
