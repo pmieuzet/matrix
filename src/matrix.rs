@@ -128,12 +128,12 @@ impl<K: Mul<Output = K> + Clone> Mul<K> for Matrix<K> {
 
 impl<K: Div<Output = K> + Clone> Div<K> for Matrix<K> {
     type Output = Self;
-    fn div(self, rhs: K) -> Self::Output {
+    fn div(self, scalar: K) -> Self::Output {
         let mut data = vec![];
         for item in self.data {
             let mut vector = vec![];
             for x in item.into_iter() {
-                vector.push(x / rhs.clone());
+                vector.push(x / scalar.clone());
             }
             data.push(vector);
         }

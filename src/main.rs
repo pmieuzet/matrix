@@ -115,4 +115,32 @@ fn main() {
         }
         // [[11., 5.5][16.5, 22.]]
     }
+
+    println!("\n\n---------------EX02---------------\n");
+    {
+        let u = Vector::from([0., 0.]);
+        let v = Vector::from([1., 1.]);
+        match u.dot(v) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        // 0.0
+    }
+    {
+        let u = Vector::from([1., 1.]);
+        let v = Vector::from([1., 1.]);
+        match u.dot(v) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        // 2.0
+    }
+    {
+        let u = Vector::from([-1., 6.]);
+        let v = Vector::from([3., 2.]);
+        match u.dot(v) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        } // 9.0
+    }
 }

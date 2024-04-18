@@ -19,22 +19,17 @@ where
         .ok_or(Error::EmptyVector)
 }
 
+/// Linear interpolation: estimate the value of a function between two given points.
 pub fn lerp<V>(u: V, v: V, t: f32) -> Result<V, Error>
 where
     V: std::ops::Add<Output = V>
         + std::ops::Mul<f32, Output = V>
         + std::ops::Sub<Output = V>
-        + std::ops::Div<f32, Output = V>
         + Clone,
 {
     if t < 0. || t > 1. {
         return Err(Error::WrongRangeScalar);
     }
 
-    match t {
-        0.0 => Ok(u),
-        1.0 => Ok(v),
-        0.5 => Ok((u + v).div(2.)),
-        _ => Ok(v - u.clone() + u.mul(t)),
-    }
+    Ok(u.clone() + (v - u) * t)
 }

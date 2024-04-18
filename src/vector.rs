@@ -1,4 +1,4 @@
-use crate::matrix;
+use crate::{errors::Error, matrix};
 
 use matrix::Matrix;
 use std::{
@@ -42,6 +42,20 @@ impl<K> Vector<K> {
             columns: self.data.len(),
             data: vec![self.data],
         }
+    }
+
+    /// Return a scalar product of two vectors
+    pub fn dot(&self, v: Vector<K>) -> Result<K, Error>
+    where
+        K: Mul<Output = K> + Add<Output = K> + Clone,
+    {
+        self.to_owned()
+            .data
+            .into_iter()
+            .zip(v.data.into_iter())
+            .map(|(a, b)| a * b)
+            .reduce(|acc, a| acc + a)
+            .ok_or(Error::EmptyVector)
     }
 }
 
@@ -94,6 +108,12 @@ impl<K: Mul<Output = K> + Clone> Mul<K> for Vector<K> {
         }
     }
 }
+
+// dot (output = k)
+// impl<K: Mul<Output = K> + Clone> Mul<Vector<K>> for Vector<K> {
+//     type Output = K;
+//     fn mul(self, scalar: Vector<K>) -> Self::Output {}
+// }
 
 impl<K: Div<Output = K> + Clone> Div<K> for Vector<K> {
     type Output = Self;
