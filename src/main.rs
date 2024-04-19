@@ -3,7 +3,7 @@ use std::ops::{Add, Mul, Sub};
 use matrix::Matrix;
 use vector::Vector;
 
-use crate::functions::{angle_cos, lerp, linear_combination};
+use crate::functions::{angle_cos, cross_product, lerp, linear_combination};
 
 mod errors;
 mod functions;
@@ -116,7 +116,7 @@ fn main() {
         // [[11., 5.5][16.5, 22.]]
     }
 
-    println!("\n\n---------------EX02---------------\n");
+    println!("\n\n---------------EX03---------------\n");
     {
         let u = Vector::from([0., 0.]);
         let v = Vector::from([1., 1.]);
@@ -144,7 +144,7 @@ fn main() {
         } // 9.0
     }
 
-    println!("\n\n---------------EX03---------------\n");
+    println!("\n\n---------------EX04---------------\n");
     {
         let u = Vector::from([0., 0., 0.]);
         println!("{}, {}, {}", u.norm_1(), u.norm(), u.norm_inf());
@@ -161,13 +161,13 @@ fn main() {
         // 3.0, 2.236067977, 2.0
     }
 
-    println!("\n\n---------------EX04---------------\n");
+    println!("\n\n---------------EX05---------------\n");
     {
         let u = Vector::from([1., 0.]);
         let v = Vector::from([1., 0.]);
         match angle_cos(&u, &v) {
             Ok(cos) => println!("{}", cos),
-            Err(e) => println!("{e}"),
+            Err(e) => eprintln!("{e}"),
         }
         // 1.0
     }
@@ -176,7 +176,7 @@ fn main() {
         let v = Vector::from([0., 1.]);
         match angle_cos(&u, &v) {
             Ok(cos) => println!("{}", cos),
-            Err(e) => println!("{e}"),
+            Err(e) => eprintln!("{e}"),
         } // 0.0
     }
     {
@@ -184,7 +184,7 @@ fn main() {
         let v = Vector::from([1., -1.]);
         match angle_cos(&u, &v) {
             Ok(cos) => println!("{}", cos),
-            Err(e) => println!("{e}"),
+            Err(e) => eprintln!("{e}"),
         } // -1.0
     }
     {
@@ -192,7 +192,7 @@ fn main() {
         let v = Vector::from([4., 2.]);
         match angle_cos(&u, &v) {
             Ok(cos) => println!("{}", cos),
-            Err(e) => println!("{e}"),
+            Err(e) => eprintln!("{e}"),
         } // 1.0
     }
     {
@@ -200,7 +200,36 @@ fn main() {
         let v = Vector::from([4., 5., 6.]);
         match angle_cos(&u, &v) {
             Ok(cos) => println!("{}", cos),
-            Err(e) => println!("{e}"),
+            Err(e) => eprintln!("{e}"),
         } // 0.9746318
+    }
+
+    println!("\n\n---------------EX06---------------\n");
+    {
+        let u = Vector::from([0., 0., 1.]);
+        let v = Vector::from([1., 0., 0.]);
+        match cross_product(&u, &v) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        // [0.][1.][0.]
+    }
+    {
+        let u = Vector::from([1., 2., 3.]);
+        let v = Vector::from([4., 5., 6.]);
+        match cross_product(&u, &v) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        // [-3.][6.][-3.]
+    }
+    {
+        let u = Vector::from([4., 2., -3.]);
+        let v = Vector::from([-2., -5., 16.]);
+        match cross_product(&u, &v) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        // [17.][-58.][-16.]
     }
 }

@@ -1,6 +1,6 @@
-use std::ops::{Add, Div, Mul};
+use std::ops::{Add, Mul, Sub};
 
-use crate::{errors::Error, matrix::Matrix, vector::Vector};
+use crate::{errors::Error, vector::Vector};
 
 /// Creation of a new vector by multiplying each vector by a corresponding scalar, then adding the results
 pub fn linear_combination<K>(u: &[Vector<K>], coefs: &[K]) -> Result<Vector<K>, Error>
@@ -53,4 +53,21 @@ where
         Err(e) => return Err(e),
         Ok(s) => return Ok(s.into() / (u.norm() * v.norm())),
     };
+}
+
+/// Compute the cross product of two 3-dimensional vectors
+pub fn cross_product<K>(u: &Vector<K>, v: &Vector<K>) -> Result<Vector<K>, Error>
+where
+    K: Mul<Output = K> + Sub<Output = K> + Copy,
+{
+    if u.size != 3 || v.size != 3 {
+        return Err(Error::VecNotTridimensional);
+    }
+
+    let mut data = vec![];
+    data.push(u.data[1] * v.data[2] - u.data[2] * v.data[1]);
+    data.push(u.data[2] * v.data[0] - u.data[0] * v.data[2]);
+    data.push(u.data[0] * v.data[1] - u.data[1] * v.data[0]);
+
+    Ok(Vector { size: 3, data })
 }

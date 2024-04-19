@@ -6,4 +6,6 @@ pub enum Error {
     EmptyVector,
     #[error("Error: The scalar is a wrong range.")]
     WrongRangeScalar,
+    #[error("Error: The vector is not tridimensional.")]
+    VecNotTridimensional,
 }
