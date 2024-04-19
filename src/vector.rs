@@ -63,13 +63,41 @@ impl<K> Vector<K> {
     }
 }
 
-impl<V: Add<f32, Output = f32>> Vector<V> {
-    //TODO implement abs to V
-    fn norm_1(&self) -> f32 {
-        self.to_owned().data.into_iter().fold(0., |acc, a| a + acc)
+impl<V> Vector<V>
+where
+    V: Add<f32, Output = f32>
+        + std::cmp::PartialOrd<f32>
+        + Mul<f32, Output = V>
+        + Mul<Output = V>
+        + Into<f32>
+        + Clone,
+{
+    fn abs(x: &V) -> V {
+        if *x < 0. {
+            return x.clone() * -1.;
+        }
+        x.clone()
     }
-    fn norm(&mut self) -> f32 {}
-    fn norm_inf(&mut self) -> f32 {}
+    fn max(a: V, b: f32) -> f32 {
+        if a > b {
+            return a.into();
+        }
+        b
+    }
+    pub fn norm_1(&self) -> f32 {
+        self.data.iter().fold(0., |acc, a| Self::abs(a) + acc)
+    }
+    pub fn norm(&self) -> f32 {
+        self.data
+            .iter()
+            .fold(0., |acc, a| Self::abs(a) * Self::abs(a) + acc)
+            .powf(0.5)
+    }
+    pub fn norm_inf(&self) -> f32 {
+        self.data
+            .iter()
+            .fold(0., |acc, a| Self::max(Self::abs(a), acc))
+    }
 }
 
 /// Compute the addition of two vectors
