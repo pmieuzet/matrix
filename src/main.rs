@@ -120,7 +120,7 @@ fn main() {
     {
         let u = Vector::from([0., 0.]);
         let v = Vector::from([1., 1.]);
-        match u.dot(v) {
+        match u.dot(&v) {
             Ok(res) => println!("{}", res),
             Err(e) => eprintln!("{e}"),
         }
@@ -129,7 +129,7 @@ fn main() {
     {
         let u = Vector::from([1., 1.]);
         let v = Vector::from([1., 1.]);
-        match u.dot(v) {
+        match u.dot(&v) {
             Ok(res) => println!("{}", res),
             Err(e) => eprintln!("{e}"),
         }
@@ -138,7 +138,7 @@ fn main() {
     {
         let u = Vector::from([-1., 6.]);
         let v = Vector::from([3., 2.]);
-        match u.dot(v) {
+        match u.dot(&v) {
             Ok(res) => println!("{}", res),
             Err(e) => eprintln!("{e}"),
         } // 9.0
@@ -231,5 +231,61 @@ fn main() {
             Err(e) => eprintln!("{e}"),
         }
         // [17.][-58.][-16.]
+    }
+
+    println!("\n\n---------------EX06---------------\n");
+    {
+        let u = Matrix::from([[1., 0.], [0., 1.]]);
+        let v = Vector::from([4., 2.]);
+        match u.mul(v) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        // [4.][2.]
+    }
+    {
+        let u = Matrix::from([[2., 0.], [0., 2.]]);
+        let v = Vector::from([4., 2.]);
+        match u.mul(v) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        // [8.][4.]
+    }
+    {
+        let u = Matrix::from([[2., -2.], [-2., 2.]]);
+        let v = Vector::from([4., 2.]);
+        match u.mul(v) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        // [4.][-4.]
+    }
+    {
+        let u = Matrix::from([[1., 0.], [0., 1.]]);
+        let v = Matrix::from([[1., 0.], [0., 1.]]);
+        match u.mul(v) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        // [1., 0.][0., 1.]
+    }
+    {
+        let u = Matrix::from([[1., 0.], [0., 1.]]);
+        let v = Matrix::from([[2., 1.], [4., 2.]]);
+        match u.mul(v) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        // [2., 1.][4., 2.]
+    }
+    {
+        let u = Matrix::from([[3., -5.], [6., 8.]]);
+        let v = Matrix::from([[2., 1.], [4., 2.]]);
+        match u.mul(v) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        // [-14., -7.][44., 22.]
     }
 }

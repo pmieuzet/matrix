@@ -1,8 +1,8 @@
-use crate::vector;
+use crate::{errors::Error, vector};
 
 use std::{
     fmt::Display,
-    ops::{Add, Div, Mul, Sub},
+    ops::{Add, AddAssign, Div, Mul, Sub},
 };
 use vector::Vector;
 
@@ -126,21 +126,74 @@ impl<K: Mul<Output = K> + Clone> Mul<K> for Matrix<K> {
     }
 }
 
-impl<K: Div<Output = K> + Clone> Div<K> for Matrix<K> {
-    type Output = Self;
-    fn div(self, scalar: K) -> Self::Output {
+/// Multiply a matrix by a vector
+impl<K: Mul<Output = K> + AddAssign + Copy> Mul<Vector<K>> for Matrix<K> {
+    type Output = Result<Vector<K>, Error>;
+    fn mul(self, rhs: Vector<K>) -> Self::Output {
+        if self.columns != rhs.size {
+            return Err(Error::WrongSizeMatrix);
+        }
+
         let mut data = vec![];
-        for item in self.data {
+        for m in 0..self.rows {
+            let mut acc = self.data[m][0] * rhs.data[0];
+            for n in 1..rhs.size {
+                acc += self.data[m][n] * rhs.data[n];
+            }
+            data.push(acc);
+        }
+
+        Ok(Vector {
+            size: data.len(),
+            data,
+        })
+    }
+}
+
+/// Multiply a matrix by a matrix
+impl<K: Mul<Output = K> + Copy + AddAssign> Mul<Matrix<K>> for Matrix<K> {
+    type Output = Result<Self, Error>;
+    fn mul(self, rhs: Matrix<K>) -> Self::Output {
+        if self.columns != rhs.rows {
+            return Err(Error::WrongSizeMatrix);
+        }
+
+        let mut data = vec![];
+        for m in 0..self.rows {
             let mut vector = vec![];
-            for x in item.into_iter() {
-                vector.push(x / scalar.clone());
+            for p in 0..rhs.columns {
+                let mut acc = self.data[m][0] * rhs.data[0][p];
+                for n in 1..self.columns {
+                    acc += self.data[m][n] * rhs.data[n][p];
+                }
+                vector.push(acc);
             }
             data.push(vector);
         }
-        Self {
+
+        Ok(Matrix {
             rows: self.rows,
-            columns: self.columns,
+            columns: rhs.columns,
             data,
-        }
+        })
     }
 }
+
+// impl<K: Div<Output = K> + Clone> Div<K> for Matrix<K> {
+//     type Output = Self;
+//     fn div(self, scalar: K) -> Self::Output {
+//         let mut data = vec![];
+//         for item in self.data {
+//             let mut vector = vec![];
+//             for x in item.into_iter() {
+//                 vector.push(x / scalar.clone());
+//             }
+//             data.push(vector);
+//         }
+//         Self {
+//             rows: self.rows,
+//             columns: self.columns,
+//             data,
+//         }
+//     }
+// }

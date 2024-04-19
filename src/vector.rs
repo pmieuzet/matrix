@@ -45,19 +45,19 @@ impl<K> Vector<K> {
     }
 
     /// Return a scalar product of two vectors
-    pub fn dot(&self, v: Vector<K>) -> Result<K, Error>
+    //TODO: voir sans to owned?
+    pub fn dot(&self, v: &Vector<K>) -> Result<K, Error>
     where
-        K: Mul<Output = K> + Add<Output = K> + Clone,
+        K: Mul<Output = K> + Add<Output = K> + Copy,
     {
         if self.size != v.size {
             return Err(Error::NotSameSize);
         }
 
-        self.to_owned()
-            .data
-            .into_iter()
-            .zip(v.data.into_iter())
-            .map(|(a, b)| a * b)
+        self.data
+            .iter()
+            .zip(v.data.iter())
+            .map(|(a, b)| *a * *b)
             .reduce(|acc, a| acc + a)
             .ok_or(Error::EmptyVector)
     }
@@ -158,18 +158,3 @@ impl<K: Mul<Output = K> + Clone> Mul<K> for Vector<K> {
 //     type Output = K;
 //     fn mul(self, scalar: Vector<K>) -> Self::Output {}
 // }
-
-impl<K: Div<Output = K> + Clone> Div<K> for Vector<K> {
-    type Output = Self;
-    fn div(self, scalar: K) -> Self::Output {
-        let data = self
-            .data
-            .into_iter()
-            .map(|x| x / scalar.clone())
-            .collect::<Vec<K>>();
-        Self {
-            size: data.len(),
-            data,
-        }
-    }
-}

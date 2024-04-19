@@ -40,7 +40,7 @@ where
     K: Mul<Output = K>
         + Add<Output = K>
         + Add<f32, Output = f32>
-        + Clone
+        + Copy
         + Into<f32>
         + PartialOrd<f32>
         + Mul<f32, Output = K>,
@@ -49,7 +49,7 @@ where
         return Err(Error::NotSameSize);
     }
 
-    match u.dot(v.to_owned()) {
+    match u.dot(v) {
         Err(e) => return Err(e),
         Ok(s) => return Ok(s.into() / (u.norm() * v.norm())),
     };
