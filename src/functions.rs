@@ -1,4 +1,4 @@
-use std::ops::{Add, Mul};
+use std::ops::{Add, Div, Mul};
 
 use crate::{errors::Error, matrix::Matrix, vector::Vector};
 
@@ -32,4 +32,25 @@ where
     }
 
     Ok(u.clone() + (v - u) * t)
+}
+
+/// compute the cosine of the angle between the two vectors u and v
+pub fn angle_cos<K>(u: &Vector<K>, v: &Vector<K>) -> Result<f32, Error>
+where
+    K: Mul<Output = K>
+        + Add<Output = K>
+        + Add<f32, Output = f32>
+        + Clone
+        + Into<f32>
+        + PartialOrd<f32>
+        + Mul<f32, Output = K>,
+{
+    if u.size != v.size {
+        return Err(Error::NotSameSize);
+    }
+
+    match u.dot(v.to_owned()) {
+        Err(e) => return Err(e),
+        Ok(s) => return Ok(s.into() / (u.norm() * v.norm())),
+    };
 }

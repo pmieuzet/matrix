@@ -3,10 +3,10 @@ use std::ops::{Add, Mul, Sub};
 use matrix::Matrix;
 use vector::Vector;
 
-use crate::linear_algorithms::{lerp, linear_combination};
+use crate::functions::{angle_cos, lerp, linear_combination};
 
 mod errors;
-mod linear_algorithms;
+mod functions;
 mod matrix;
 mod vector;
 
@@ -144,7 +144,7 @@ fn main() {
         } // 9.0
     }
 
-    println!("\n\n---------------EX02---------------\n");
+    println!("\n\n---------------EX03---------------\n");
     {
         let u = Vector::from([0., 0., 0.]);
         println!("{}, {}, {}", u.norm_1(), u.norm(), u.norm_inf());
@@ -159,5 +159,48 @@ fn main() {
         let u = Vector::from([-1., -2.]);
         println!("{}, {}, {}", u.norm_1(), u.norm(), u.norm_inf());
         // 3.0, 2.236067977, 2.0
+    }
+
+    println!("\n\n---------------EX04---------------\n");
+    {
+        let u = Vector::from([1., 0.]);
+        let v = Vector::from([1., 0.]);
+        match angle_cos(&u, &v) {
+            Ok(cos) => println!("{}", cos),
+            Err(e) => println!("{e}"),
+        }
+        // 1.0
+    }
+    {
+        let u = Vector::from([1., 0.]);
+        let v = Vector::from([0., 1.]);
+        match angle_cos(&u, &v) {
+            Ok(cos) => println!("{}", cos),
+            Err(e) => println!("{e}"),
+        } // 0.0
+    }
+    {
+        let u = Vector::from([-1., 1.]);
+        let v = Vector::from([1., -1.]);
+        match angle_cos(&u, &v) {
+            Ok(cos) => println!("{}", cos),
+            Err(e) => println!("{e}"),
+        } // -1.0
+    }
+    {
+        let u = Vector::from([2., 1.]);
+        let v = Vector::from([4., 2.]);
+        match angle_cos(&u, &v) {
+            Ok(cos) => println!("{}", cos),
+            Err(e) => println!("{e}"),
+        } // 1.0
+    }
+    {
+        let u = Vector::from([1., 2., 3.]);
+        let v = Vector::from([4., 5., 6.]);
+        match angle_cos(&u, &v) {
+            Ok(cos) => println!("{}", cos),
+            Err(e) => println!("{e}"),
+        } // 0.9746318
     }
 }

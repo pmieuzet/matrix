@@ -84,15 +84,18 @@ where
         }
         b
     }
+    /// ∥v∥1 : Manhattan norm / Taxicab norm
     pub fn norm_1(&self) -> f32 {
         self.data.iter().fold(0., |acc, a| Self::abs(a) + acc)
     }
+    /// ∥v∥ or ∥v∥2 : Euclidean norm
     pub fn norm(&self) -> f32 {
         self.data
             .iter()
             .fold(0., |acc, a| Self::abs(a) * Self::abs(a) + acc)
             .powf(0.5)
     }
+    /// ∥v∥∞ : supremum norm / maximum norm
     pub fn norm_inf(&self) -> f32 {
         self.data
             .iter()
