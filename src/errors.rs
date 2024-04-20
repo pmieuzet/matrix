@@ -8,6 +8,8 @@ pub enum Error {
     WrongRangeScalar,
     #[error("Error: The vector is not tridimensional.")]
     VecNotTridimensional,
-    #[error("Error: Wrong size of matrix")]
+    #[error("Error: Wrong size of matrix.")]
     WrongSizeMatrix,
+    #[error("Error: The matrix must be square.")]
+    NotSquareMatrix,
 }

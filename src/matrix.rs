@@ -3,6 +3,7 @@ use crate::{errors::Error, vector};
 use std::{
     fmt::Display,
     ops::{Add, AddAssign, Div, Mul, Sub},
+    process::Output,
 };
 use vector::Vector;
 
@@ -61,6 +62,23 @@ impl<K> Matrix<K> {
             size: vector.len(),
             data: vector,
         }
+    }
+
+    ///  Compute the trace of the given matrix
+    pub fn trace(&self) -> Result<K, Error>
+    where
+        K: AddAssign + Copy,
+    {
+        if !self.is_square() {
+            return Err(Error::NotSquareMatrix);
+        }
+
+        let mut trace = self.data[0][0];
+        for n in 1..self.rows {
+            trace += self.data[n][n];
+        }
+
+        Ok(trace)
     }
 }
 
@@ -178,22 +196,3 @@ impl<K: Mul<Output = K> + Copy + AddAssign> Mul<Matrix<K>> for Matrix<K> {
         })
     }
 }
-
-// impl<K: Div<Output = K> + Clone> Div<K> for Matrix<K> {
-//     type Output = Self;
-//     fn div(self, scalar: K) -> Self::Output {
-//         let mut data = vec![];
-//         for item in self.data {
-//             let mut vector = vec![];
-//             for x in item.into_iter() {
-//                 vector.push(x / scalar.clone());
-//             }
-//             data.push(vector);
-//         }
-//         Self {
-//             rows: self.rows,
-//             columns: self.columns,
-//             data,
-//         }
-//     }
-// }
