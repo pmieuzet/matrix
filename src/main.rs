@@ -233,7 +233,7 @@ fn main() {
         // [17.][-58.][-16.]
     }
 
-    println!("\n\n---------------EX06---------------\n");
+    println!("\n\n---------------EX07---------------\n");
     {
         let u = Matrix::from([[1., 0.], [0., 1.]]);
         let v = Vector::from([4., 2.]);
@@ -287,5 +287,29 @@ fn main() {
             Err(e) => eprintln!("{e}"),
         }
         // [-14., -7.][44., 22.]
+    }
+
+    println!("\n\n---------------EX08---------------\n");
+    {
+        let u = Matrix::from([[1., 0.], [0., 1.]]);
+        match u.trace() {
+            Ok(trace) => println!("{}", trace),
+            Err(e) => eprintln!("{e}"),
+        }
+        // 2.0
+    }
+    {
+        let u = Matrix::from([[2., -5., 0.], [4., 3., 7.], [-2., 3., 4.]]);
+        match u.trace() {
+            Ok(trace) => println!("{}", trace),
+            Err(e) => eprintln!("{e}"),
+        } // 9.0
+    }
+    {
+        let u = Matrix::from([[-2., -8., 4.], [1., -23., 4.], [0., 6., 4.]]);
+        match u.trace() {
+            Ok(trace) => println!("{}", trace),
+            Err(e) => eprintln!("{e}"),
+        } // -21.0
     }
 }
