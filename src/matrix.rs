@@ -4,6 +4,7 @@ use std::{
     fmt::Display,
     ops::{Add, AddAssign, Div, Mul, Sub},
     process::Output,
+    vec,
 };
 use vector::Vector;
 
@@ -27,7 +28,7 @@ impl<K, const N: usize, const U: usize> From<[[K; N]; U]> for Matrix<K> {
         for item in data {
             matrice.push(Vec::from(item));
         }
-        Self::new(matrice, N, U)
+        Self::new(matrice, U, N)
     }
 }
 
@@ -79,6 +80,27 @@ impl<K> Matrix<K> {
         }
 
         Ok(trace)
+    }
+
+    /// Compute the transpose matrix of a given matrix
+    pub fn transpose(&self) -> Matrix<K>
+    where
+        K: Copy,
+    {
+        let mut data = vec![];
+        for n in 0..self.columns {
+            let mut vector = vec![];
+            for m in 0..self.rows {
+                vector.push(self.data[m][n]);
+            }
+            data.push(vector);
+        }
+
+        Matrix {
+            rows: self.columns,
+            columns: self.rows,
+            data,
+        }
     }
 }
 
