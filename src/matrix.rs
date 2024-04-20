@@ -2,8 +2,7 @@ use crate::{errors::Error, vector};
 
 use std::{
     fmt::Display,
-    ops::{Add, AddAssign, Div, Mul, Sub},
-    process::Output,
+    ops::{Add, AddAssign, Mul, Not, Sub, SubAssign},
     vec,
 };
 use vector::Vector;
@@ -83,7 +82,7 @@ impl<K> Matrix<K> {
     }
 
     /// Compute the transpose matrix of a given matrix
-    pub fn transpose(&self) -> Matrix<K>
+    pub fn transpose(&self) -> Self
     where
         K: Copy,
     {
@@ -96,11 +95,61 @@ impl<K> Matrix<K> {
             data.push(vector);
         }
 
-        Matrix {
+        Self {
             rows: self.columns,
             columns: self.rows,
             data,
         }
+    }
+
+    // TODO /// Compute the row-echelon form of the given matrix
+    // pub fn row_echelon(&self) -> Self {}
+
+    fn get_sub_matrix(&self, n: usize) -> Self
+    where
+        K: Copy,
+    {
+        let mut data = vec![];
+        for i in 1..self.rows {
+            let mut vector = vec![];
+            for j in 0..self.columns {
+                if j != n {
+                    vector.push(self.data[i][j]);
+                }
+            }
+            data.push(vector);
+        }
+        Matrix {
+            rows: self.rows - 1,
+            columns: self.columns - 1,
+            data,
+        }
+    }
+
+    /// Compute the determinant of the given matrix
+    pub fn determinant(&self) -> Result<K, Error>
+    where
+        K: Mul<Output = K> + Sub<Output = K> + Default + Copy + AddAssign + SubAssign,
+    {
+        if !self.is_square() || self.rows < 2 {
+            return Err(Error::NotSquareMatrix);
+        }
+
+        if self.rows == 2 {
+            return Ok(self.data[0][0] * self.data[1][1] - self.data[1][0] * self.data[0][1]);
+        }
+
+        let mut det = K::default();
+        let mut add = true;
+        for n in 0..self.columns {
+            if add == true {
+                det += self.data[0][n] * self.get_sub_matrix(n).determinant().unwrap();
+            } else {
+                det -= self.data[0][n] * self.get_sub_matrix(n).determinant().unwrap();
+            }
+            add = !add;
+        }
+        Ok(det)
     }
 }
 

@@ -312,10 +312,48 @@ fn main() {
             Err(e) => eprintln!("{e}"),
         } // -21.0
     }
+
     println!("\n\n---------------EX09---------------\n");
     {
         let u = Matrix::from([[2., -9., 3.], [13., 11., -17.]]);
         println!("{}", u.transpose());
         // [[2., 13.][-9., 11][3., -17.]]
+    }
+
+    println!("\n\n---------------EX10---------------\n");
+
+    {
+        let u = Matrix::from([[1., -1.], [-1., 1.]]);
+        match u.determinant() {
+            Ok(det) => println!("{}", det),
+            Err(e) => eprintln!("{e}"),
+        }
+        // 0.0
+    }
+    {
+        let u = Matrix::from([[2., 0., 0.], [0., 2., 0.], [0., 0., 2.]]);
+        match u.determinant() {
+            Ok(det) => println!("{}", det),
+            Err(e) => eprintln!("{e}"),
+        } // 8.0
+    }
+    {
+        let u = Matrix::from([[8., 5., -2.], [4., 7., 20.], [7., 6., 1.]]);
+        match u.determinant() {
+            Ok(det) => println!("{}", det),
+            Err(e) => eprintln!("{e}"),
+        } // -174.0
+    }
+    {
+        let u = Matrix::from([
+            [8., 5., -2., 4.],
+            [4., 2.5, 20., 4.],
+            [8., 5., 1., 4.],
+            [28., -4., 17., 1.],
+        ]);
+        match u.determinant() {
+            Ok(det) => println!("{}", det),
+            Err(e) => eprintln!("{e}"),
+        } // 1032
     }
 }
