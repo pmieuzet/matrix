@@ -1,10 +1,12 @@
 use std::ops::{Add, Mul, Sub};
 
+use complex_number::ComplexNumber;
 use matrix::Matrix;
 use vector::Vector;
 
 use crate::functions::{angle_cos, cross_product, lerp, linear_combination};
 
+mod complex_number;
 mod errors;
 mod functions;
 mod matrix;
@@ -424,4 +426,197 @@ fn main() {
         println!("{}", u.rank());
         // 3
     }
+
+    println!("\n\n---------------EX00 -- BONUS---------------\n");
+    {
+        let u = Vector::from([
+            ComplexNumber { x: 1., y: 2. },
+            ComplexNumber { x: 2., y: 1. },
+        ]);
+        let v = Vector::from([
+            ComplexNumber { x: 4., y: 8. },
+            ComplexNumber { x: 1., y: 2. },
+        ]);
+        println!("{}", u.add(v));
+        // [5.0, 10.0][3.0, 3.0]
+    }
+    {
+        let u = Vector::from([
+            ComplexNumber { x: 1., y: 2. },
+            ComplexNumber { x: 2., y: 1. },
+        ]);
+        let v = Vector::from([
+            ComplexNumber { x: 4., y: 8. },
+            ComplexNumber { x: 1., y: 2. },
+        ]);
+        println!("{}", u.sub(v));
+        // [-3.0, -6.0][1.0, -1.0]
+    }
+    {
+        let u = Vector::from([
+            ComplexNumber { x: 1., y: 2. },
+            ComplexNumber { x: 2., y: 1. },
+        ]);
+        println!("{}", u.mul(ComplexNumber { x: 2., y: 2. }));
+        // [6.0, 6.0][6.0, 6.0]
+    }
+    {
+        let u = Matrix::from([
+            [
+                ComplexNumber { x: 1., y: 2. },
+                ComplexNumber { x: 2., y: 1. },
+            ],
+            [
+                ComplexNumber { x: 3., y: 4. },
+                ComplexNumber { x: 4., y: 3. },
+            ],
+        ]);
+        let v = Matrix::from([
+            [
+                ComplexNumber { x: 1., y: 2. },
+                ComplexNumber { x: 2., y: 1. },
+            ],
+            [
+                ComplexNumber { x: -1., y: 1. },
+                ComplexNumber { x: -2., y: 2. },
+            ],
+        ]);
+        println!("{}", u.add(v));
+    }
+    {
+        let u = Matrix::from([
+            [
+                ComplexNumber { x: 1., y: 2. },
+                ComplexNumber { x: 2., y: 1. },
+            ],
+            [
+                ComplexNumber { x: 3., y: 4. },
+                ComplexNumber { x: 4., y: 3. },
+            ],
+        ]);
+        let v = Matrix::from([
+            [
+                ComplexNumber { x: 1., y: 2. },
+                ComplexNumber { x: 2., y: 1. },
+            ],
+            [
+                ComplexNumber { x: -1., y: 1. },
+                ComplexNumber { x: -2., y: 2. },
+            ],
+        ]);
+        println!("{}", u.sub(v));
+    }
+    {
+        let u = Matrix::from([
+            [
+                ComplexNumber { x: 1., y: 2. },
+                ComplexNumber { x: 2., y: 1. },
+            ],
+            [
+                ComplexNumber { x: 3., y: 4. },
+                ComplexNumber { x: 4., y: 3. },
+            ],
+        ]);
+        println!("{}", u.mul(ComplexNumber { x: 1., y: 2. }));
+    }
+
+    println!("\n\n---------------EX01 -- BONUS---------------\n");
+    {
+        let e1 = Vector::from([
+            ComplexNumber { x: 0., y: 0. },
+            ComplexNumber { x: 0., y: 0. },
+            ComplexNumber { x: 0., y: 0. },
+        ]);
+        let e2 = Vector::from([
+            ComplexNumber { x: 0., y: 0. },
+            ComplexNumber { x: 1., y: 1. },
+            ComplexNumber { x: 0., y: 0. },
+        ]);
+        let e3 = Vector::from([
+            ComplexNumber { x: 0., y: 0. },
+            ComplexNumber { x: 0., y: 0. },
+            ComplexNumber { x: 1., y: 1. },
+        ]);
+        match linear_combination(
+            &[e1, e2, e3],
+            &[
+                ComplexNumber { x: 10., y: 2. },
+                ComplexNumber { x: -2., y: 0. },
+                ComplexNumber { x: 0.5, y: 0.5 },
+            ],
+        ) {
+            Ok(result) => println!("{}", result),
+            Err(e) => eprintln!("{e}"),
+        }
+    }
+    println!("\n\n---------------EX02 -- BONUS---------------\n");
+    {
+        match lerp(
+            ComplexNumber { x: 10., y: 0. },
+            ComplexNumber { x: 1., y: 2. },
+            0.,
+        ) {
+            Ok(res) => println!("{:?}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        match lerp(
+            ComplexNumber { x: 0., y: 0. },
+            ComplexNumber { x: 1., y: 1. },
+            1.,
+        ) {
+            Ok(res) => println!("{:?}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+    }
+    println!("\n\n---------------EX03 -- BONUS---------------\n");
+    {
+        let u = Vector::from([
+            ComplexNumber { x: 0., y: 0. },
+            ComplexNumber { x: 0., y: 0. },
+        ]);
+        let v = Vector::from([
+            ComplexNumber { x: 1., y: 1. },
+            ComplexNumber { x: 1., y: 1. },
+        ]);
+        match u.dot(&v) {
+            Ok(res) => println!("{:?}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        // 0.0
+    }
+    {
+        let u = Vector::from([
+            ComplexNumber { x: 1., y: 1. },
+            ComplexNumber { x: 1., y: 1. },
+        ]);
+        let v = Vector::from([
+            ComplexNumber { x: 1., y: 1. },
+            ComplexNumber { x: 1., y: 1. },
+        ]);
+        match u.dot(&v) {
+            Ok(res) => println!("{:?}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+    }
+
+    println!("\n\n---------------EX04 -- BONUS---------------\n");
+    // {
+    //     let u = Vector::from([
+    //         ComplexNumber { x: 0., y: 0. },
+    //         ComplexNumber { x: 0., y: 0. },
+    //         ComplexNumber { x: 0., y: 0. },
+    //     ]);
+    //     println!("{}, {}, {}", u.norm_1(), u.norm(), u.norm_inf());
+    //     // 0.0, 0.0, 0.0
+    // }
+    // {
+    //     let u = Vector::from([1., 2., 3.]);
+    //     println!("{}, {}, {}", u.norm_1(), u.norm(), u.norm_inf());
+    //     // 6.0, 3.74165738, 3.0
+    // }
+    // {
+    //     let u = Vector::from([-1., -2.]);
+    //     println!("{}, {}, {}", u.norm_1(), u.norm(), u.norm_inf());
+    //     // 3.0, 2.236067977, 2.0
+    // }
 }

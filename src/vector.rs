@@ -1,4 +1,4 @@
-use crate::{errors::Error, matrix};
+use crate::{complex_number, errors::Error, matrix};
 
 use matrix::Matrix;
 use std::{

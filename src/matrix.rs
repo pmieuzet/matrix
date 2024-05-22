@@ -1,12 +1,10 @@
-use crate::main;
 use crate::{errors::Error, vector};
-use std::env::current_exe;
 use std::fmt::Debug;
 
 use std::ops::DivAssign;
 use std::{
     fmt::Display,
-    ops::{Add, AddAssign, Div, Mul, MulAssign, Sub, SubAssign},
+    ops::{Add, AddAssign, Div, Mul, Sub, SubAssign},
     vec,
 };
 use vector::Vector;
