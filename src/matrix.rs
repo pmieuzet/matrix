@@ -326,6 +326,25 @@ impl<K> Matrix<K> {
 
         Ok(identity)
     }
+
+    pub fn rank(&self) -> usize
+    where
+        K: Div<f32, Output = K>
+            + Copy
+            + PartialOrd<f32>
+            + Div<Output = K>
+            + Sub<Output = K>
+            + Mul<Output = K>,
+    {
+        let mut rank = self.rows;
+        for row in self.row_echelon().data.iter().rev() {
+            if !row.iter().all(|a| *a == 0.) {
+                break;
+            }
+            rank -= 1;
+        }
+        rank
+    }
 }
 
 /// Compute the addition of two matrix
