@@ -3,6 +3,7 @@ use crate::{errors::Error, vector};
 use std::env::current_exe;
 use std::fmt::Debug;
 
+use std::ops::DivAssign;
 use std::{
     fmt::Display,
     ops::{Add, AddAssign, Div, Mul, MulAssign, Sub, SubAssign},
@@ -155,15 +156,38 @@ impl<K> Matrix<K> {
         Ok(det)
     }
 
-    fn find_non_null_element(&mut self, main_row: usize, current_column: usize) -> Option<usize>
+    fn find_non_null_element(&mut self, current_row: usize, current_column: usize) -> Option<usize>
     where
         K: PartialOrd<f32>,
     {
         for column in current_column..self.columns {
-            for row in main_row..self.rows {
+            for row in current_row..self.rows {
                 if self.data[row][column] != 0. {
-                    if row != main_row {
-                        self.data.swap(row, main_row);
+                    if row != current_row {
+                        self.data.swap(row, current_row);
+                    }
+                    return Some(column);
+                }
+            }
+        }
+        return None;
+    }
+
+    fn find_non_null_element_with_identity(
+        &mut self,
+        identity: &mut Matrix<K>,
+        current_row: usize,
+        current_column: usize,
+    ) -> Option<usize>
+    where
+        K: PartialOrd<f32>,
+    {
+        for column in current_column..self.columns {
+            for row in current_row..self.rows {
+                if self.data[row][column] != 0. {
+                    if row != current_row {
+                        self.data.swap(row, current_row);
+                        identity.data.swap(row, current_row);
                     }
                     return Some(column);
                 }
@@ -173,7 +197,7 @@ impl<K> Matrix<K> {
     }
 
     /// Compute the row echelon
-    pub fn row_echelon(&mut self) -> Matrix<K>
+    pub fn row_echelon(&self) -> Matrix<K>
     where
         K: Div<f32, Output = K>
             + Copy
@@ -185,30 +209,122 @@ impl<K> Matrix<K> {
         let mut matrix = self.clone();
         let mut current_column: usize = 0;
 
-        for main_row in 0..self.rows {
-            match matrix.find_non_null_element(main_row, current_column) {
+        for current_row in 0..self.rows {
+            match matrix.find_non_null_element(current_row, current_column) {
                 Some(column) => current_column = column,
                 None => return matrix,
             }
-            if matrix.data[main_row][current_column] != 1. {
-                let value = matrix.data[main_row][current_column];
-                matrix.data[main_row] = matrix.data[main_row].iter().map(|a| *a / value).collect();
+            if matrix.data[current_row][current_column] != 1. {
+                let value = matrix.data[current_row][current_column];
+                matrix.data[current_row] = matrix.data[current_row]
+                    .iter()
+                    .map(|a| *a / value)
+                    .collect();
             }
 
             for row in 0..self.rows {
-                if row != main_row && matrix.data[row][current_column] != 0. {
+                if row != current_row && matrix.data[row][current_column] != 0. {
                     let value = matrix.data[row][current_column];
 
                     matrix.data[row] = matrix.data[row]
                         .iter()
                         .enumerate()
-                        .map(|(index, a)| *a - value * matrix.data[main_row][index])
+                        .map(|(index, a)| *a - value * matrix.data[current_row][index])
                         .collect();
                 }
             }
             current_column += 1;
         }
         matrix
+    }
+
+    fn get_identity_matrix(&self) -> Matrix<K>
+    where
+        K: DivAssign + SubAssign + Copy,
+    {
+        let mut matrix = self.clone();
+
+        for row in 0..matrix.rows {
+            for column in 0..matrix.columns {
+                let value = matrix.data[row][column];
+                if row == column {
+                    matrix.data[row][column] /= value;
+                } else {
+                    matrix.data[row][column] -= value;
+                }
+            }
+        }
+
+        matrix
+    }
+
+    pub fn inverse(&self) -> Result<Matrix<K>, Error>
+    where
+        K: Mul<Output = K>
+            + Sub<Output = K>
+            + Default
+            + Copy
+            + AddAssign
+            + DivAssign
+            + SubAssign
+            + Div<Output = K>
+            + PartialOrd<f32>
+            + Debug,
+    {
+        if !self.is_square() {
+            return Err(Error::NotSquareMatrix);
+        }
+        if let Ok(det) = self.determinant() {
+            if det == 0. {
+                return Err(Error::NullDeterminantMatrix);
+            }
+        }
+
+        let mut matrix = self.clone();
+        let mut identity = self.get_identity_matrix();
+        let mut current_column: usize = 0;
+
+        for current_row in 0..self.rows {
+            match matrix.find_non_null_element_with_identity(
+                &mut identity,
+                current_row,
+                current_column,
+            ) {
+                Some(column) => current_column = column,
+                None => return Ok(matrix),
+            }
+            if matrix.data[current_row][current_column] != 1. {
+                let value = matrix.data[current_row][current_column];
+                matrix.data[current_row] = matrix.data[current_row]
+                    .iter()
+                    .map(|a| *a / value)
+                    .collect();
+                identity.data[current_row] = identity.data[current_row]
+                    .iter()
+                    .map(|a| *a / value)
+                    .collect();
+            }
+
+            for row in 0..self.rows {
+                if row != current_row && matrix.data[row][current_column] != 0. {
+                    let value = matrix.data[row][current_column];
+
+                    matrix.data[row] = matrix.data[row]
+                        .iter()
+                        .enumerate()
+                        .map(|(index, a)| *a - value * matrix.data[current_row][index])
+                        .collect();
+                    identity.data[row] = identity.data[row]
+                        .iter()
+                        .enumerate()
+                        .map(|(index, a)| *a - value * identity.data[current_row][index])
+                        .collect();
+                }
+            }
+            current_column += 1;
+        }
+
+        Ok(identity)
     }
 }
 

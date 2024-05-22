@@ -12,4 +12,6 @@ pub enum Error {
     WrongSizeMatrix,
     #[error("Error: The matrix must be square.")]
     NotSquareMatrix,
+    #[error("Error: The determinant of the matrix must be not null.")]
+    NullDeterminantMatrix,
 }
