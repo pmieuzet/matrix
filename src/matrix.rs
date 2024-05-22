@@ -1,4 +1,6 @@
+use crate::main;
 use crate::{errors::Error, vector};
+use std::env::current_exe;
 use std::fmt::Debug;
 
 use std::{
@@ -153,93 +155,60 @@ impl<K> Matrix<K> {
         Ok(det)
     }
 
+    fn find_non_null_element(&mut self, main_row: usize, current_column: usize) -> Option<usize>
+    where
+        K: PartialOrd<f32>,
+    {
+        for column in current_column..self.columns {
+            for row in main_row..self.rows {
+                if self.data[row][column] != 0. {
+                    if row != main_row {
+                        self.data.swap(row, main_row);
+                    }
+                    return Some(column);
+                }
+            }
+        }
+        return None;
+    }
+
     /// Compute the row echelon
     pub fn row_echelon(&mut self) -> Matrix<K>
     where
         K: Div<f32, Output = K>
-            + MulAssign
             + Copy
             + PartialOrd<f32>
-            + Div<f32, Output = K>
+            + Div<Output = K>
             + Sub<Output = K>
-            + Mul<Output = K>
-            + Debug,
-        f32: Div<K, Output = K>,
+            + Mul<Output = K>,
     {
-        let mut data = self.data.clone();
-        let mut mark = 0;
-        for m in 0..self.rows {
-            for n in mark..self.columns {
-                for i in m..self.rows {
-                    if i == m && data[i][n] > 1. {
-                        println!("1 -> i : {i}");
-                        data[i] = data[i].iter().map(|a| *a * (1. / data[i][n])).collect();
-                    } else if i == m && data[i][n] <= 1. {
-                        println!("2 -> i : {i}");
-                        mark += i;
-                        continue;
-                    } else if i != m && data[i][n] != 0. {
-                        println!("3 -> i : {i}, n : {n} => {:?}", data[i][n]);
-                        data[i] = data[i]
-                            .iter()
-                            .map(|a| *a - data[i][n] * (data[m][n] / 1.))
-                            .collect();
-                    } else if i != m && data[i][n] == 0. {
-                        println!("4 -> i : {i}");
-                        data[i] = data[i].iter().map(|a| *a * data[m][n]).collect();
-                    } else {
-                        println!("5 -> i : {i}");
-                    }
-                }
-                if data[m][n] == 1. {
-                    mark += 1;
-                    break;
+        let mut matrix = self.clone();
+        let mut current_column: usize = 0;
+
+        for main_row in 0..self.rows {
+            match matrix.find_non_null_element(main_row, current_column) {
+                Some(column) => current_column = column,
+                None => return matrix,
+            }
+            if matrix.data[main_row][current_column] != 1. {
+                let value = matrix.data[main_row][current_column];
+                matrix.data[main_row] = matrix.data[main_row].iter().map(|a| *a / value).collect();
+            }
+
+            for row in 0..self.rows {
+                if row != main_row && matrix.data[row][current_column] != 0. {
+                    let value = matrix.data[row][current_column];
+
+                    matrix.data[row] = matrix.data[row]
+                        .iter()
+                        .enumerate()
+                        .map(|(index, a)| *a - value * matrix.data[main_row][index])
+                        .collect();
                 }
             }
+            current_column += 1;
         }
-
-        // for mut m in 0..self.rows {
-        //     for n in m..self.rows {
-        //         for i in 0..self.columns {
-        //             if m == n {
-        //                 if i == mark && data[m][i] > 1. {
-        //                     data[i] = data[i].iter().map(|a| *a * (1. / data[m][i])).collect();
-        //                     println!("1");
-        //                 }
-        //                 if i == mark && data[m][i] == 1. {
-        //                     println!("1bis");
-        //                     mark += 1;
-        //                     m += 1;
-        //                     break;
-        //                 } else if data[m][i] == 0. {
-        //                     println!("2");
-        //                     continue;
-        //                 } else {
-        //                     data[n] = data[n].iter().map(|a| *a * data[m][i]).collect();
-        //                     println!("3");
-
-        //                     continue;
-        //                 }
-        //             }
-        //             if data[n][i] == 0. {
-        //                 data[n] = data[n].iter().map(|a| *a * data[m][i]).collect();
-        //                 println!("3bis");
-        //             } else {
-        //                 data[n] = data[n]
-        //                     .iter()
-        //                     .map(|a| *a - data[n][i] * (data[m][i] / 1.))
-        //                     .collect();
-        //             }
-        //             println!("4");
-        //         }
-        //     }
-        // }
-
-        Matrix {
-            rows: self.rows,
-            columns: self.rows,
-            data,
-        }
+        matrix
     }
 }
 
