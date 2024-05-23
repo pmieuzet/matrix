@@ -1,9 +1,9 @@
-use crate::{complex_number, errors::Error, matrix};
+use crate::{complex_number::RealNumber, errors::Error, matrix};
 
 use matrix::Matrix;
 use std::{
     fmt::Display,
-    ops::{Add, Div, Mul, Sub},
+    ops::{Add, Mul, Sub},
 };
 
 #[derive(Clone, Debug)]
@@ -63,43 +63,21 @@ impl<K> Vector<K> {
     }
 }
 
-impl<V> Vector<V>
-where
-    V: Add<f32, Output = f32>
-        + std::cmp::PartialOrd<f32>
-        + Mul<f32, Output = V>
-        + Mul<Output = V>
-        + Into<f32>
-        + Clone,
-{
-    fn abs(x: &V) -> V {
-        if *x < 0. {
-            return x.clone() * -1.;
-        }
-        x.clone()
-    }
-    fn max(a: V, b: f32) -> f32 {
-        if a > b {
-            return a.into();
-        }
-        b
-    }
+impl<V: RealNumber> Vector<V> {
     /// ∥v∥1 : Manhattan norm / Taxicab norm
     pub fn norm_1(&self) -> f32 {
-        self.data.iter().fold(0., |acc, a| Self::abs(a) + acc)
+        self.data.iter().fold(0., |acc, a| a.abs() + acc)
     }
     /// ∥v∥ or ∥v∥2 : Euclidean norm
     pub fn norm(&self) -> f32 {
         self.data
             .iter()
-            .fold(0., |acc, a| Self::abs(a) * Self::abs(a) + acc)
+            .fold(0., |acc, a| a.abs() * a.abs() + acc)
             .powf(0.5)
     }
     /// ∥v∥∞ : supremum norm / maximum norm
     pub fn norm_inf(&self) -> f32 {
-        self.data
-            .iter()
-            .fold(0., |acc, a| Self::max(Self::abs(a), acc))
+        self.data.iter().fold(0., |acc, a| f32::max(acc, a.abs()))
     }
 }
 

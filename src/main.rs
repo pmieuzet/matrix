@@ -600,15 +600,14 @@ fn main() {
     }
 
     println!("\n\n---------------EX04 -- BONUS---------------\n");
-    // {
-    //     let u = Vector::from([
-    //         ComplexNumber { x: 0., y: 0. },
-    //         ComplexNumber { x: 0., y: 0. },
-    //         ComplexNumber { x: 0., y: 0. },
-    //     ]);
-    //     println!("{}, {}, {}", u.norm_1(), u.norm(), u.norm_inf());
-    //     // 0.0, 0.0, 0.0
-    // }
+    {
+        let u = Vector::from([
+            ComplexNumber { x: 1., y: 1. },
+            ComplexNumber { x: 1., y: 1. },
+            ComplexNumber { x: 1., y: 1. },
+        ]);
+        println!("{}, {}, {}", u.norm_1(), u.norm(), u.norm_inf());
+    }
     // {
     //     let u = Vector::from([1., 2., 3.]);
     //     println!("{}, {}, {}", u.norm_1(), u.norm(), u.norm_inf());
@@ -619,4 +618,88 @@ fn main() {
     //     println!("{}, {}, {}", u.norm_1(), u.norm(), u.norm_inf());
     //     // 3.0, 2.236067977, 2.0
     // }
+
+    println!("\n\n---------------EX05 -- BONUS---------------\n");
+    {
+        let u = Vector::from([
+            ComplexNumber { x: 1., y: 1. },
+            ComplexNumber { x: 0., y: 0. },
+        ]);
+        let v = Vector::from([
+            ComplexNumber { x: 1., y: 1. },
+            ComplexNumber { x: 0., y: 0. },
+        ]);
+        match angle_cos(&u, &v) {
+            Ok(cos) => println!("{}", cos),
+            Err(e) => eprintln!("{e}"),
+        }
+        // 1.0
+    }
+    {
+        let u = Vector::from([
+            ComplexNumber { x: 1., y: 1. },
+            ComplexNumber { x: 0., y: 0. },
+        ]);
+        let v = Vector::from([
+            ComplexNumber { x: 0., y: 0. },
+            ComplexNumber { x: 1., y: 1. },
+        ]);
+        match angle_cos(&u, &v) {
+            Ok(cos) => println!("{}", cos),
+            Err(e) => eprintln!("{e}"),
+        } // 0.0
+    }
+    println!("\n\n---------------EX06 -- BONUS---------------\n");
+    {
+        let u = Vector::from([
+            ComplexNumber { x: 0., y: 0. },
+            ComplexNumber { x: 0., y: 0. },
+            ComplexNumber { x: 1., y: 1. },
+        ]);
+        let v = Vector::from([
+            ComplexNumber { x: 1., y: 1. },
+            ComplexNumber { x: 0., y: 0. },
+            ComplexNumber { x: 0., y: 0. },
+        ]);
+        match cross_product(&u, &v) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+    }
+    {
+        let u = Vector::from([
+            ComplexNumber { x: 1., y: 1. },
+            ComplexNumber { x: 2., y: 2. },
+            ComplexNumber { x: 3., y: 3. },
+        ]);
+        let v = Vector::from([
+            ComplexNumber { x: 4., y: 4. },
+            ComplexNumber { x: 5., y: 5. },
+            ComplexNumber { x: 6., y: 6. },
+        ]);
+        match cross_product(&u, &v) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+    }
+
+    println!("\n\n---------------EX07 -- BONUS---------------\n");
+    {
+        let u = Matrix::from([[1., 0.], [0., 1.]]);
+        let v = Vector::from([4., 2.]);
+        match u.mul(v) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        // [4.][2.]
+    }
+    {
+        let u = Matrix::from([[2., 0.], [0., 2.]]);
+        let v = Vector::from([4., 2.]);
+        match u.mul(v) {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
+        // [8.][4.]
+    }
 }
