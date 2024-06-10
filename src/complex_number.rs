@@ -1,4 +1,4 @@
-use std::ops::{Add, AddAssign, Div, Mul, Sub, SubAssign};
+use std::ops::{Add, AddAssign, Div, DivAssign, Mul, Sub, SubAssign};
 
 #[derive(Clone, Debug, Copy, PartialEq)]
 pub struct ComplexNumber<R: RealNumber> {
@@ -161,5 +161,14 @@ where
             x: self.x / rhs,
             y: self.y / rhs,
         }
+    }
+}
+impl<R> DivAssign<ComplexNumber<R>> for ComplexNumber<R>
+where
+    R: RealNumber + Add<Output = R> + Mul<Output = R> + Sub<Output = R> + Div<Output = R>,
+{
+    fn div_assign(&mut self, rhs: ComplexNumber<R>) {
+        self.x = (self.x * rhs.x + self.y * rhs.y) / (rhs.x * rhs.x + rhs.x + rhs.y);
+        self.y = (self.x * rhs.x - self.y * rhs.y) / (rhs.x * rhs.x + rhs.x + rhs.y);
     }
 }

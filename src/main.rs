@@ -839,45 +839,78 @@ fn main() {
         }
     }
 
-    // println!("\n\n---------------EX12---------------\n");
-    // {
-    //     let u = Matrix::from([[1., 0., 0.], [0., 1., 0.], [0., 0., 1.]]);
-    //     match u.inverse() {
-    //         Ok(inverse) => println!("{}", inverse),
-    //         Err(e) => eprintln!("{e}"),
-    //     }
-    // }
-    // {
-    //     // [1.0, 0.0, 0.0][0.0, 1.0, 0.0][0.0, 0.0, 1.0]
-    //     let u = Matrix::from([[2., 0., 0.], [0., 2., 0.], [0., 0., 2.]]);
-    //     match u.inverse() {
-    //         Ok(inverse) => println!("{}", inverse),
-    //         Err(e) => eprintln!("{e}"),
-    //     }
-    // }
-    // {
-    //     // [0.5, 0.0, 0.0][0.0, 0.5, 0.0][0.0, 0.0, 0.5]
-    //     let u = Matrix::from([[8., 5., -2.], [4., 7., 20.], [7., 6., 1.]]);
-    //     match u.inverse() {
-    //         Ok(inverse) => println!("{}", inverse),
-    //         Err(e) => eprintln!("{e}"),
-    //     }
-    //     // [0.649425287, 0.097701149, -0.655172414][-0.781609195, -0.126436782, 0.965517241][0.143678161, 0.074712644, -0.206896552]
+    println!("\n\n---------------EX12---------------\n");
+    {
+        let u: Matrix<ComplexNumber<f32>> = Matrix::from([
+            [
+                ComplexNumber { x: 1., y: 0. },
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 0., y: 0. },
+            ],
+            [
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 1., y: 0. },
+                ComplexNumber { x: 0., y: 0. },
+            ],
+            [
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 1., y: 0. },
+            ],
+        ]);
+        match u.inverse() {
+            Ok(inverse) => println!("{}", inverse),
+            Err(e) => eprintln!("{e}"),
+        }
+    }
+    {
+        // [1.0, 0.0, 0.0][0.0, 1.0, 0.0][0.0, 0.0, 1.0]
+        let u = Matrix::from([[2., 0., 0.], [0., 2., 0.], [0., 0., 2.]]);
+        match u.inverse() {
+            Ok(inverse) => println!("{}", inverse),
+            Err(e) => eprintln!("{e}"),
+        }
+    }
+    {
+        // [0.5, 0.0, 0.0][0.0, 0.5, 0.0][0.0, 0.0, 0.5]
+        let u = Matrix::from([[8., 5., -2.], [4., 7., 20.], [7., 6., 1.]]);
+        match u.inverse() {
+            Ok(inverse) => println!("{}", inverse),
+            Err(e) => eprintln!("{e}"),
+        }
+    }
+    // [0.649425287, 0.097701149, -0.655172414][-0.781609195, -0.126436782, 0.965517241][0.143678161, 0.074712644, -0.206896552]
 
-    // println!("\n\n---------------EX13---------------\n");
-    // {
-    //     let u = Matrix::from([[1., 0., 0.], [0., 1., 0.], [0., 0., 1.]]);
-    //     println!("{}", u.rank());
-    //     // 3
-    // }
-    // {
-    //     let u = Matrix::from([[1., 2., 0., 0.], [2., 4., 0., 0.], [-1., 2., 1., 1.]]);
-    //     println!("{}", u.rank());
-    //     // 2
-    // }
-    // {
-    //     let u = Matrix::from([[8., 5., -2.], [4., 7., 20.], [7., 6., 1.], [21., 18., 7.]]);
-    //     println!("{}", u.rank());
-    //     // 3
-    // }
+    println!("\n\n---------------EX13---------------\n");
+    {
+        let u: Matrix<ComplexNumber<f32>> = Matrix::from([
+            [
+                ComplexNumber { x: 1., y: 0. },
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 0., y: 0. },
+            ],
+            [
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 1., y: 0. },
+                ComplexNumber { x: 0., y: 0. },
+            ],
+            [
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 1., y: 0. },
+            ],
+        ]);
+        println!("{}", u.rank());
+        // 3
+    }
+    {
+        let u = Matrix::from([[1., 2., 0., 0.], [2., 4., 0., 0.], [-1., 2., 1., 1.]]);
+        println!("{}", u.rank());
+        // 2
+    }
+    {
+        let u = Matrix::from([[8., 5., -2.], [4., 7., 20.], [7., 6., 1.], [21., 18., 7.]]);
+        println!("{}", u.rank());
+        // 3
+    }
 }

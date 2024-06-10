@@ -180,7 +180,7 @@ impl<K> Matrix<K> {
         current_column: usize,
     ) -> Option<usize>
     where
-        K: RealNumber + PartialEq<f32>,
+        K: RealNumber,
     {
         for column in current_column..self.columns {
             for row in current_row..self.rows {
@@ -263,20 +263,18 @@ impl<K> Matrix<K> {
         K: Mul<Output = K>
             + Sub<Output = K>
             + RealNumber
-            + Default
             + Copy
             + AddAssign
             + DivAssign
             + SubAssign
             + Div<Output = K>
-            + PartialOrd<f32>
             + Debug,
     {
         if !self.is_square() {
             return Err(Error::NotSquareMatrix);
         }
         if let Ok(det) = self.determinant() {
-            if det == 0. {
+            if det == K::zero() {
                 return Err(Error::NullDeterminantMatrix);
             }
         }
@@ -294,7 +292,7 @@ impl<K> Matrix<K> {
                 Some(column) => current_column = column,
                 None => return Ok(matrix),
             }
-            if matrix.data[current_row][current_column] != 1. {
+            if matrix.data[current_row][current_column] != K::one() {
                 let value = matrix.data[current_row][current_column];
                 matrix.data[current_row] = matrix.data[current_row]
                     .iter()
@@ -307,7 +305,7 @@ impl<K> Matrix<K> {
             }
 
             for row in 0..self.rows {
-                if row != current_row && matrix.data[row][current_column] != 0. {
+                if row != current_row && matrix.data[row][current_column] != K::zero() {
                     let value = matrix.data[row][current_column];
 
                     matrix.data[row] = matrix.data[row]
@@ -333,14 +331,13 @@ impl<K> Matrix<K> {
         K: Div<f32, Output = K>
             + Copy
             + RealNumber
-            + PartialOrd<f32>
             + Div<Output = K>
             + Sub<Output = K>
             + Mul<Output = K>,
     {
         let mut rank = self.rows;
         for row in self.row_echelon().data.iter().rev() {
-            if !row.iter().all(|a| *a == 0.) {
+            if !row.iter().all(|a| *a == K::zero()) {
                 break;
             }
             rank -= 1;
