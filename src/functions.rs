@@ -49,7 +49,7 @@ where
 
     match u.dot(v) {
         Err(e) => return Err(e),
-        Ok(s) => s.div_safe(u.norm() * v.norm()),
+        Ok(s) => DivSafe::div(s, u.norm() * v.norm()),
     }
 }
 

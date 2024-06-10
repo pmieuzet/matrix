@@ -120,10 +120,10 @@ impl<K: Sub<Output = K>> Sub for Vector<K> {
 }
 
 pub trait DivSafe {
-    fn div_safe(self, rhs: f32) -> Result<f32, Error>;
+    fn div(self, rhs: f32) -> Result<f32, Error>;
 }
 impl DivSafe for f32 {
-    fn div_safe(self, rhs: f32) -> Result<f32, Error> {
+    fn div(self, rhs: f32) -> Result<f32, Error> {
         Ok(self / rhs)
     }
 }
@@ -131,7 +131,7 @@ impl<R> DivSafe for ComplexNumber<R>
 where
     R: RealNumber + PartialEq<f32> + Div<f32, Output = f32>,
 {
-    fn div_safe(self, rhs: f32) -> Result<f32, Error> {
+    fn div(self, rhs: f32) -> Result<f32, Error> {
         if self.y != 0.0 {
             return Err(Error::NotImaginaryPartOfComplexNumber);
         }

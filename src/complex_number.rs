@@ -1,8 +1,4 @@
-use crate::errors::Error;
-use std::{
-    ops::{Add, Div, Mul, Sub},
-    process::Output,
-};
+use std::ops::{Add, AddAssign, Div, Mul, Sub, SubAssign};
 
 #[derive(Clone, Debug, Copy, PartialEq)]
 pub struct ComplexNumber<R: RealNumber> {
@@ -12,10 +8,22 @@ pub struct ComplexNumber<R: RealNumber> {
 
 pub trait RealNumber: PartialEq + Copy + Mul + Add + Div + Sub {
     fn abs(self) -> f32;
+    fn zero() -> Self;
+    fn one() -> Self;
+    fn default() -> Self;
 }
 impl RealNumber for f32 {
     fn abs(self) -> f32 {
         self.abs()
+    }
+    fn zero() -> Self {
+        0.0
+    }
+    fn one() -> Self {
+        1.0
+    }
+    fn default() -> Self {
+        Default::default()
     }
 }
 impl<R> RealNumber for ComplexNumber<R>
@@ -24,6 +32,24 @@ where
 {
     fn abs(self) -> f32 {
         (self.x.abs() * self.x.abs() + self.y.abs() * self.y.abs()).sqrt()
+    }
+    fn zero() -> Self {
+        Self {
+            x: R::zero(),
+            y: R::zero(),
+        }
+    }
+    fn one() -> Self {
+        Self {
+            x: R::one(),
+            y: R::zero(),
+        }
+    }
+    fn default() -> Self {
+        Self {
+            x: R::default(),
+            y: R::default(),
+        }
     }
 }
 
@@ -34,6 +60,12 @@ impl<R: Add<Output = R> + RealNumber> Add<ComplexNumber<R>> for ComplexNumber<R>
             x: self.x + rhs.x,
             y: self.y + rhs.y,
         }
+    }
+}
+impl<R: RealNumber + AddAssign> AddAssign<ComplexNumber<R>> for ComplexNumber<R> {
+    fn add_assign(&mut self, rhs: ComplexNumber<R>) {
+        self.x += rhs.x;
+        self.y += rhs.y;
     }
 }
 impl<R> Sub<ComplexNumber<R>> for ComplexNumber<R>
@@ -70,6 +102,12 @@ where
             x: self.x * rhs,
             y: self.y * rhs,
         }
+    }
+}
+impl<R: RealNumber> SubAssign<ComplexNumber<R>> for ComplexNumber<R> {
+    fn sub_assign(&mut self, rhs: ComplexNumber<R>) {
+        self.x = self.x * rhs.x + self.y * rhs.y;
+        self.y = self.x * rhs.y + self.y * rhs.x;
     }
 }
 // impl<R> Mul<f32> for ComplexNumber<R>
@@ -110,15 +148,15 @@ where
 //         self.x / rhs
 //     }
 // }
-// impl<R> Div<f32> for ComplexNumber<R>
-// where
-//     R: Div<f32, Output = R> + RealNumber,
-// {
-//     type Output = Self
-//     fn div(self, rhs: f32) -> Self::Output {
-//         Self {
-//             x: self.x / rhs,
-//             y: self.y / rhs,
-//         }
-//     }
-// }
+impl<R> Div<f32> for ComplexNumber<R>
+where
+    R: Div<f32, Output = R> + RealNumber,
+{
+    type Output = Self;
+    fn div(self, rhs: f32) -> Self::Output {
+        Self {
+            x: self.x / rhs,
+            y: self.y / rhs,
+        }
+    }
+}

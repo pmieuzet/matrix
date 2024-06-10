@@ -685,21 +685,183 @@ fn main() {
 
     println!("\n\n---------------EX07 -- BONUS---------------\n");
     {
-        let u = Matrix::from([[1., 0.], [0., 1.]]);
-        let v = Vector::from([4., 2.]);
+        let u: Matrix<ComplexNumber<f32>> = Matrix::from([
+            [
+                ComplexNumber { x: 1., y: 0. },
+                ComplexNumber { x: 0., y: 1. },
+            ],
+            [
+                ComplexNumber { x: 0., y: 1. },
+                ComplexNumber { x: 0., y: 1. },
+            ],
+        ]);
+        let v: Vector<ComplexNumber<f32>> = Vector::from([ComplexNumber { x: 4., y: 2. }]);
         match u.mul(v) {
             Ok(res) => println!("{}", res),
             Err(e) => eprintln!("{e}"),
         }
-        // [4.][2.]
     }
     {
-        let u = Matrix::from([[2., 0.], [0., 2.]]);
-        let v = Vector::from([4., 2.]);
+        let u: Matrix<ComplexNumber<f32>> = Matrix::from([
+            [ComplexNumber { x: 10., y: 12. }],
+            [ComplexNumber { x: 6., y: 5. }],
+        ]);
+        let v = Vector::from([ComplexNumber { x: 4., y: 2. }]);
         match u.mul(v) {
             Ok(res) => println!("{}", res),
             Err(e) => eprintln!("{e}"),
         }
-        // [8.][4.]
     }
+
+    println!("\n\n---------------EX08---------------\n");
+    {
+        let u: Matrix<ComplexNumber<f32>> = Matrix::from([
+            [ComplexNumber { x: 1., y: 0. }],
+            [ComplexNumber { x: 0., y: 1. }],
+        ]);
+        match u.trace() {
+            Ok(trace) => println!("{:?}", trace),
+            Err(e) => eprintln!("{e}"),
+        }
+    }
+    {
+        let u: Matrix<ComplexNumber<f32>> = Matrix::from([
+            [
+                ComplexNumber { x: 2., y: 2. },
+                ComplexNumber { x: -5., y: 1. },
+                ComplexNumber { x: 0., y: 0. },
+            ],
+            [
+                ComplexNumber { x: 4., y: 1. },
+                ComplexNumber { x: 3., y: 0. },
+                ComplexNumber { x: 4., y: 1. },
+            ],
+        ]);
+        match u.trace() {
+            Ok(trace) => println!("{:?}", trace),
+            Err(e) => eprintln!("{e}"),
+        }
+    }
+
+    println!("\n\n---------------EX09---------------\n");
+    {
+        let u: Matrix<ComplexNumber<f32>> = Matrix::from([
+            [
+                ComplexNumber { x: 2., y: 1. },
+                ComplexNumber { x: -9., y: 1. },
+                ComplexNumber { x: 3., y: 1. },
+            ],
+            [
+                ComplexNumber { x: 13., y: 1. },
+                ComplexNumber { x: 11., y: 1. },
+                ComplexNumber { x: -17., y: 1. },
+            ],
+        ]);
+        let u = Matrix::from([[2., -9., 3.], [13., 11., -17.]]);
+        println!("{}", u.transpose());
+    }
+
+    println!("\n\n---------------EX10---------------\n");
+    {
+        let u: Matrix<ComplexNumber<f32>> = Matrix::from([
+            [
+                ComplexNumber { x: 1., y: 0. },
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 0., y: 0. },
+            ],
+            [
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 1., y: 0. },
+                ComplexNumber { x: 0., y: 0. },
+            ],
+            [
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 1., y: 0. },
+            ],
+        ]);
+        println!("{}", u.row_echelon());
+    }
+    {
+        let u: Matrix<ComplexNumber<f32>> = Matrix::from([
+            [
+                ComplexNumber { x: 1., y: 0. },
+                ComplexNumber { x: 2., y: 0. },
+            ],
+            [
+                ComplexNumber { x: 3., y: 0. },
+                ComplexNumber { x: 4., y: 0. },
+            ],
+        ]);
+        let mut u = Matrix::from([[1., 2.], [3., 4.]]);
+        println!("{}", u.row_echelon());
+    }
+
+    println!("\n\n---------------EX11---------------\n");
+    {
+        let u: Matrix<ComplexNumber<f32>> = Matrix::from([
+            [
+                ComplexNumber { x: 1., y: 0. },
+                ComplexNumber { x: -1., y: 0. },
+            ],
+            [
+                ComplexNumber { x: -1., y: 0. },
+                ComplexNumber { x: 1., y: 0. },
+            ],
+        ]);
+        match u.determinant() {
+            Ok(det) => println!("{:?}", det),
+            Err(e) => eprintln!("{e}"),
+        }
+        // 0.0
+    }
+    {
+        let u = Matrix::from([[2., 0., 0.], [0., 2., 0.], [0., 0., 2.]]);
+        match u.determinant() {
+            Ok(det) => println!("{}", det),
+            Err(e) => eprintln!("{e}"),
+        } // 8.0
+    }
+
+    // println!("\n\n---------------EX12---------------\n");
+    // {
+    //     let u = Matrix::from([[1., 0., 0.], [0., 1., 0.], [0., 0., 1.]]);
+    //     match u.inverse() {
+    //         Ok(inverse) => println!("{}", inverse),
+    //         Err(e) => eprintln!("{e}"),
+    //     }
+    // }
+    // {
+    //     // [1.0, 0.0, 0.0][0.0, 1.0, 0.0][0.0, 0.0, 1.0]
+    //     let u = Matrix::from([[2., 0., 0.], [0., 2., 0.], [0., 0., 2.]]);
+    //     match u.inverse() {
+    //         Ok(inverse) => println!("{}", inverse),
+    //         Err(e) => eprintln!("{e}"),
+    //     }
+    // }
+    // {
+    //     // [0.5, 0.0, 0.0][0.0, 0.5, 0.0][0.0, 0.0, 0.5]
+    //     let u = Matrix::from([[8., 5., -2.], [4., 7., 20.], [7., 6., 1.]]);
+    //     match u.inverse() {
+    //         Ok(inverse) => println!("{}", inverse),
+    //         Err(e) => eprintln!("{e}"),
+    //     }
+    //     // [0.649425287, 0.097701149, -0.655172414][-0.781609195, -0.126436782, 0.965517241][0.143678161, 0.074712644, -0.206896552]
+
+    // println!("\n\n---------------EX13---------------\n");
+    // {
+    //     let u = Matrix::from([[1., 0., 0.], [0., 1., 0.], [0., 0., 1.]]);
+    //     println!("{}", u.rank());
+    //     // 3
+    // }
+    // {
+    //     let u = Matrix::from([[1., 2., 0., 0.], [2., 4., 0., 0.], [-1., 2., 1., 1.]]);
+    //     println!("{}", u.rank());
+    //     // 2
+    // }
+    // {
+    //     let u = Matrix::from([[8., 5., -2.], [4., 7., 20.], [7., 6., 1.], [21., 18., 7.]]);
+    //     println!("{}", u.rank());
+    //     // 3
+    // }
 }

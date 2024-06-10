@@ -1,6 +1,8 @@
+use crate::complex_number::RealNumber;
 use crate::{errors::Error, vector};
 use std::fmt::Debug;
 
+use num::zero;
 use std::ops::DivAssign;
 use std::{
     fmt::Display,
@@ -131,7 +133,7 @@ impl<K> Matrix<K> {
     /// Compute the determinant of the given matrix
     pub fn determinant(&self) -> Result<K, Error>
     where
-        K: Mul<Output = K> + Sub<Output = K> + Default + Copy + AddAssign + SubAssign,
+        K: Mul<Output = K> + RealNumber + Sub<Output = K> + Copy + AddAssign + SubAssign,
     {
         if !self.is_square() || self.rows < 2 {
             return Err(Error::NotSquareMatrix);
@@ -156,11 +158,11 @@ impl<K> Matrix<K> {
 
     fn find_non_null_element(&mut self, current_row: usize, current_column: usize) -> Option<usize>
     where
-        K: PartialOrd<f32>,
+        K: RealNumber,
     {
         for column in current_column..self.columns {
             for row in current_row..self.rows {
-                if self.data[row][column] != 0. {
+                if self.data[row][column] != K::zero() {
                     if row != current_row {
                         self.data.swap(row, current_row);
                     }
@@ -178,11 +180,11 @@ impl<K> Matrix<K> {
         current_column: usize,
     ) -> Option<usize>
     where
-        K: PartialOrd<f32>,
+        K: RealNumber + PartialEq<f32>,
     {
         for column in current_column..self.columns {
             for row in current_row..self.rows {
-                if self.data[row][column] != 0. {
+                if self.data[row][column] != K::zero() {
                     if row != current_row {
                         self.data.swap(row, current_row);
                         identity.data.swap(row, current_row);
@@ -199,7 +201,7 @@ impl<K> Matrix<K> {
     where
         K: Div<f32, Output = K>
             + Copy
-            + PartialOrd<f32>
+            + RealNumber
             + Div<Output = K>
             + Sub<Output = K>
             + Mul<Output = K>,
@@ -212,7 +214,7 @@ impl<K> Matrix<K> {
                 Some(column) => current_column = column,
                 None => return matrix,
             }
-            if matrix.data[current_row][current_column] != 1. {
+            if matrix.data[current_row][current_column] != K::one() {
                 let value = matrix.data[current_row][current_column];
                 matrix.data[current_row] = matrix.data[current_row]
                     .iter()
@@ -221,7 +223,7 @@ impl<K> Matrix<K> {
             }
 
             for row in 0..self.rows {
-                if row != current_row && matrix.data[row][current_column] != 0. {
+                if row != current_row && matrix.data[row][current_column] != K::zero() {
                     let value = matrix.data[row][current_column];
 
                     matrix.data[row] = matrix.data[row]
@@ -260,6 +262,7 @@ impl<K> Matrix<K> {
     where
         K: Mul<Output = K>
             + Sub<Output = K>
+            + RealNumber
             + Default
             + Copy
             + AddAssign
@@ -329,6 +332,7 @@ impl<K> Matrix<K> {
     where
         K: Div<f32, Output = K>
             + Copy
+            + RealNumber
             + PartialOrd<f32>
             + Div<Output = K>
             + Sub<Output = K>
@@ -408,7 +412,7 @@ impl<K: Mul<Output = K> + Clone> Mul<K> for Matrix<K> {
 }
 
 /// Multiply a matrix by a vector
-impl<K: Mul<Output = K> + AddAssign + Copy> Mul<Vector<K>> for Matrix<K> {
+impl<K: Mul<Output = K> + AddAssign + Copy + RealNumber> Mul<Vector<K>> for Matrix<K> {
     type Output = Result<Vector<K>, Error>;
     fn mul(self, rhs: Vector<K>) -> Self::Output {
         if self.columns != rhs.size {
