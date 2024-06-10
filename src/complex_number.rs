@@ -104,7 +104,10 @@ where
         }
     }
 }
-impl<R: RealNumber> SubAssign<ComplexNumber<R>> for ComplexNumber<R> {
+impl<R> SubAssign<ComplexNumber<R>> for ComplexNumber<R>
+where
+    R: RealNumber + Add<Output = R> + Mul<Output = R>,
+{
     fn sub_assign(&mut self, rhs: ComplexNumber<R>) {
         self.x = self.x * rhs.x + self.y * rhs.y;
         self.y = self.x * rhs.y + self.y * rhs.x;

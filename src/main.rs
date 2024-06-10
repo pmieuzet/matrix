@@ -816,11 +816,27 @@ fn main() {
         // 0.0
     }
     {
-        let u = Matrix::from([[2., 0., 0.], [0., 2., 0.], [0., 0., 2.]]);
+        let u: Matrix<ComplexNumber<f32>> = Matrix::from([
+            [
+                ComplexNumber { x: 2., y: 0. },
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 0., y: 0. },
+            ],
+            [
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 2., y: 0. },
+                ComplexNumber { x: 0., y: 0. },
+            ],
+            [
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 2., y: 0. },
+            ],
+        ]);
         match u.determinant() {
-            Ok(det) => println!("{}", det),
+            Ok(det) => println!("{:?}", det),
             Err(e) => eprintln!("{e}"),
-        } // 8.0
+        }
     }
 
     // println!("\n\n---------------EX12---------------\n");
