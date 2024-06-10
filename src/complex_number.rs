@@ -1,4 +1,8 @@
-use std::ops::{Add, Div, Mul, Sub};
+use crate::errors::Error;
+use std::{
+    ops::{Add, Div, Mul, Sub},
+    process::Output,
+};
 
 #[derive(Clone, Debug, Copy, PartialEq)]
 pub struct ComplexNumber<R: RealNumber> {
@@ -90,15 +94,31 @@ where
         }
     }
 }
-impl<R> Div<f32> for ComplexNumber<R>
-where
-    R: Div<f32, Output = R> + RealNumber,
-{
-    type Output = Self;
-    fn div(self, rhs: f32) -> Self::Output {
-        Self {
-            x: self.x / rhs,
-            y: self.y / rhs,
-        }
-    }
-}
+
+// impl<R> Div<f32> for ComplexNumber<R>
+// where
+//     R: Div<f32, Output = f32> + RealNumber + PartialEq<f32>,
+// {
+//     type Output = f32;
+//     fn div(self, rhs: f32) -> Self::Output {
+//         if self.y != 0.0 {
+//             // eprintln!(
+//             //     "You cannot divide a complex number with a float if the imaginary part is not null"
+//             // );
+//             return 0.0;
+//         }
+//         self.x / rhs
+//     }
+// }
+// impl<R> Div<f32> for ComplexNumber<R>
+// where
+//     R: Div<f32, Output = R> + RealNumber,
+// {
+//     type Output = Self
+//     fn div(self, rhs: f32) -> Self::Output {
+//         Self {
+//             x: self.x / rhs,
+//             y: self.y / rhs,
+//         }
+//     }
+// }

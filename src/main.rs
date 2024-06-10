@@ -637,12 +637,12 @@ fn main() {
     }
     {
         let u = Vector::from([
-            ComplexNumber { x: 1., y: 1. },
+            ComplexNumber { x: 1., y: 0. },
             ComplexNumber { x: 0., y: 0. },
         ]);
         let v = Vector::from([
-            ComplexNumber { x: 0., y: 0. },
-            ComplexNumber { x: 1., y: 1. },
+            ComplexNumber { x: 3., y: 0. },
+            ComplexNumber { x: 5., y: 0. },
         ]);
         match angle_cos(&u, &v) {
             Ok(cos) => println!("{}", cos),

@@ -1,9 +1,13 @@
-use crate::{complex_number::RealNumber, errors::Error, matrix};
+use crate::{
+    complex_number::{ComplexNumber, RealNumber},
+    errors::Error,
+    matrix,
+};
 
 use matrix::Matrix;
 use std::{
     fmt::Display,
-    ops::{Add, Mul, Sub},
+    ops::{Add, Div, Mul, Sub},
 };
 
 #[derive(Clone, Debug)]
@@ -48,7 +52,7 @@ impl<K> Vector<K> {
     //TODO: voir sans to owned?
     pub fn dot(&self, v: &Vector<K>) -> Result<K, Error>
     where
-        K: Mul<Output = K> + Add<Output = K> + Copy,
+        K: Mul<Output = K> + Add<Output = K> + Copy + RealNumber,
     {
         if self.size != v.size {
             return Err(Error::NotSameSize);
@@ -112,6 +116,26 @@ impl<K: Sub<Output = K>> Sub for Vector<K> {
             size: data.len(),
             data,
         }
+    }
+}
+
+pub trait DivSafe {
+    fn div_safe(self, rhs: f32) -> Result<f32, Error>;
+}
+impl DivSafe for f32 {
+    fn div_safe(self, rhs: f32) -> Result<f32, Error> {
+        Ok(self / rhs)
+    }
+}
+impl<R> DivSafe for ComplexNumber<R>
+where
+    R: RealNumber + PartialEq<f32> + Div<f32, Output = f32>,
+{
+    fn div_safe(self, rhs: f32) -> Result<f32, Error> {
+        if self.y != 0.0 {
+            return Err(Error::NotImaginaryPartOfComplexNumber);
+        }
+        Ok(self.x / rhs)
     }
 }
 

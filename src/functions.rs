@@ -1,6 +1,10 @@
 use std::ops::{Add, Div, Mul, Sub};
 
-use crate::{complex_number::RealNumber, errors::Error, vector::Vector};
+use crate::{
+    complex_number::{ComplexNumber, RealNumber},
+    errors::Error,
+    vector::{DivSafe, Vector},
+};
 
 /// Creation of a new vector by multiplying each vector by a corresponding scalar, then adding the results
 pub fn linear_combination<K>(u: &[Vector<K>], coefs: &[K]) -> Result<Vector<K>, Error>
@@ -37,7 +41,7 @@ where
 /// compute the cosine of the angle between the two vectors u and v
 pub fn angle_cos<K>(u: &Vector<K>, v: &Vector<K>) -> Result<f32, Error>
 where
-    K: RealNumber + Mul<Output = K> + Add<Output = K> + Div<f32, Output = f32>,
+    K: DivSafe + RealNumber + Mul<Output = K> + Add<Output = K>,
 {
     if u.size != v.size {
         return Err(Error::NotSameSize);
@@ -45,8 +49,8 @@ where
 
     match u.dot(v) {
         Err(e) => return Err(e),
-        Ok(s) => return Ok(s / (u.norm() * v.norm())),
-    };
+        Ok(s) => s.div_safe(u.norm() * v.norm()),
+    }
 }
 
 /// Compute the cross product of two 3-dimensional vectors

@@ -14,4 +14,6 @@ pub enum Error {
     NotSquareMatrix,
     #[error("Error: The determinant of the matrix must be not null.")]
     NullDeterminantMatrix,
+    #[error("Error: The imaginary part is not null")]
+    NotImaginaryPartOfComplexNumber,
 }
