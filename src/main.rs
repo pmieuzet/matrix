@@ -5,11 +5,13 @@ use matrix::Matrix;
 use vector::Vector;
 
 use crate::functions::{angle_cos, cross_product, lerp, linear_combination};
+use crate::projection::projection;
 
 mod complex_number;
 mod errors;
 mod functions;
 mod matrix;
+mod projection;
 mod vector;
 
 fn main() {
@@ -912,5 +914,10 @@ fn main() {
         let u = Matrix::from([[8., 5., -2.], [4., 7., 20.], [7., 6., 1.], [21., 18., 7.]]);
         println!("{}", u.rank());
         // 3
+    }
+    println!("\n\n----------PROJECTION BONUS----------\n");
+    {
+        let matrix = projection(1.6, 1., 0.1, 100.);
+        println!("{}", matrix);
     }
 }

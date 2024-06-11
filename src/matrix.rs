@@ -2,7 +2,6 @@ use crate::complex_number::RealNumber;
 use crate::{errors::Error, vector};
 use std::fmt::Debug;
 
-use num::zero;
 use std::ops::DivAssign;
 use std::{
     fmt::Display,
