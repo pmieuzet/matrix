@@ -12,6 +12,7 @@ mod errors;
 mod functions;
 mod matrix;
 mod projection;
+mod tests;
 mod vector;
 
 fn main() {

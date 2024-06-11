@@ -10,7 +10,7 @@ use std::{
     ops::{Add, Div, Mul, Sub},
 };
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Vector<K> {
     pub size: usize,
     pub data: Vec<K>,

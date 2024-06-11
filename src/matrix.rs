@@ -10,7 +10,7 @@ use std::{
 };
 use vector::Vector;
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Matrix<K> {
     pub rows: usize,
     pub columns: usize,
