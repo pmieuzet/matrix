@@ -1,4 +1,4 @@
-#[derive(thiserror::Error, Debug)]
+#[derive(thiserror::Error, Debug, PartialEq)]
 pub enum Error {
     #[error("Error: The two arguments are not the same size.")]
     NotSameSize,
