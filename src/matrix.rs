@@ -72,7 +72,9 @@ impl<K> Matrix<K> {
     where
         K: AddAssign + Copy,
     {
-        if !self.is_square() {
+        if self.size() == 0 {
+            return Err(Error::EmptyMatrix);
+        } else if !self.is_square() {
             return Err(Error::NotSquareMatrix);
         }
 

@@ -18,4 +18,6 @@ pub enum Error {
     NotImaginaryPartOfComplexNumber,
     #[error("Error: The division by zero is not allowed.")]
     DivisionByZero,
+    #[error("Error: The matrix is empty.")]
+    EmptyMatrix,
 }
