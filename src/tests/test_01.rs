@@ -50,4 +50,13 @@ mod test_01 {
         let expected = Vector::from([1.8, 2.8, 3.3]);
         assert_eq!(result, Ok(expected));
     }
+    #[test]
+    fn test_01_06() {
+        let v1 = Vector::from([]);
+        let v2 = Vector::from([]);
+
+        let result = linear_combination(&[v1, v2], &[0., 1.]);
+        let expected = Ok(Vector::from([]));
+        assert_eq!(result, expected);
+    }
 }

@@ -48,4 +48,13 @@ mod test_03 {
         let expected = Err(Error::NotSameSize);
         assert_eq!(result, expected);
     }
+    #[test]
+    fn test_03_06() {
+        let u = Vector::<f32>::from([]);
+        let v = Vector::<f32>::from([]);
+
+        let result = u.dot(&v);
+        let expected = Err(Error::EmptyVector);
+        assert_eq!(result, expected);
+    }
 }
