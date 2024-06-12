@@ -275,13 +275,13 @@ impl<K> Matrix<K> {
             + Div<Output = K>
             + Debug,
     {
-        if !self.is_square() {
-            return Err(Error::NotSquareMatrix);
-        }
-        if let Ok(det) = self.determinant() {
-            if det == K::zero() {
-                return Err(Error::NullDeterminantMatrix);
+        match self.determinant() {
+            Ok(det) => {
+                if det == K::zero() {
+                    return Err(Error::NullDeterminantMatrix);
+                }
             }
+            Err(e) => return Err(e),
         }
 
         let mut matrix = self.clone();
