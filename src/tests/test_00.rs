@@ -124,6 +124,7 @@ mod test_matrix_01 {
         let expected = Matrix::from([[8., 6.], [1., 6.]]);
         assert_eq![result, expected];
     }
+
     #[test]
     fn test_00_add_02() {
         let u = Matrix::from([[-1., -2.], [-3., 4.]]);
@@ -132,6 +133,7 @@ mod test_matrix_01 {
         let expected = Matrix::from([[-1., -4.], [-1., 2.]]);
         assert_eq![result, expected];
     }
+
     #[test]
     fn test_00_add_03() {
         let u = Matrix::from([[1.1, 2.0], [3.2, 4.2]]);
@@ -140,6 +142,7 @@ mod test_matrix_01 {
         let expected = Matrix::from([[8.8, 6.4], [1.0, 6.4]]);
         assert_eq![result, expected];
     }
+
     #[test]
     fn test_00_sub_01() {
         let u = Matrix::from([[1., 2.], [3., 4.]]);
@@ -148,6 +151,7 @@ mod test_matrix_01 {
         let expected = Matrix::from([[-6.0, -2.0], [5.0, 2.0]]);
         assert_eq![result, expected];
     }
+
     #[test]
     fn test_00_sub_02() {
         let u = Matrix::from([[1., -2.], [3., -4.]]);
@@ -156,6 +160,7 @@ mod test_matrix_01 {
         let expected = Matrix::from([[2.0, 0.0], [5.0, -6.0]]);
         assert_eq![result, expected];
     }
+
     #[test]
     fn test_00_sub_03() {
         let u = Matrix::from([[1.1, 2.4], [3.2, 4.2]]);
@@ -164,6 +169,7 @@ mod test_matrix_01 {
         let expected = Matrix::from([[-6.6, -1.6], [5.4, 2.0]]);
         assert_eq![result, expected];
     }
+
     #[test]
     fn test_00_mul_01() {
         let u = Matrix::from([[1., 2.], [3., 4.]]);
@@ -171,6 +177,7 @@ mod test_matrix_01 {
         let expected = Matrix::from([[2.0, 4.0], [6.0, 8.0]]);
         assert_eq![result, expected];
     }
+
     #[test]
     fn test_00_mul_02() {
         let u = Matrix::from([[-1., 0.], [-3., -2.]]);
@@ -178,6 +185,7 @@ mod test_matrix_01 {
         let expected = Matrix::from([[-2., 0.], [-6., -4.]]);
         assert_eq![result, expected];
     }
+
     #[test]
     fn test_00_mul_03() {
         let u = Matrix::from([[-1., 0.], [-3., 2.]]);
@@ -185,6 +193,7 @@ mod test_matrix_01 {
         let expected = Matrix::from([[2., 0.], [6., -4.]]);
         assert_eq![result, expected];
     }
+
     #[test]
     fn test_00_mul_04() {
         let u = Matrix::from([[-1., 0.], [-3., 2.]]);
@@ -192,6 +201,7 @@ mod test_matrix_01 {
         let expected = Matrix::from([[0., 0.], [0., 0.]]);
         assert_eq![result, expected];
     }
+
     #[test]
     fn test_00_sub_05() {
         let u = Matrix::from([[1.0, 2.4], [3.0, 4.01]]);
