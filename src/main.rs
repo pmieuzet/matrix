@@ -321,7 +321,10 @@ fn main() {
     println!("\n\n---------------EX09---------------\n");
     {
         let u = Matrix::from([[2., -9., 3.], [13., 11., -17.]]);
-        println!("{}", u.transpose());
+        match u.transpose() {
+            Ok(res) => println!("{}", res),
+            Err(e) => eprintln!("{e}"),
+        }
         // [[2., 13.][-9., 11][3., -17.]]
     }
 
@@ -761,7 +764,10 @@ fn main() {
             ],
         ]);
         let u = Matrix::from([[2., -9., 3.], [13., 11., -17.]]);
-        println!("{}", u.transpose());
+        match u.transpose() {
+            Ok(transpose) => println!("{}", transpose),
+            Err(e) => eprintln!("{e}"),
+        }
     }
 
     println!("\n\n---------------EX10---------------\n");

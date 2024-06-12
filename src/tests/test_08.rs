@@ -1,8 +1,7 @@
+#[cfg(test)]
 mod test_08 {
-    use std::ops::Mul;
-
     use crate::errors::Error;
-    use crate::{matrix::Matrix, vector::Vector};
+    use crate::matrix::Matrix;
 
     #[test]
     fn test_08_01() {

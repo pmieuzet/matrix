@@ -87,10 +87,14 @@ impl<K> Matrix<K> {
     }
 
     /// Compute the transpose matrix of a given matrix
-    pub fn transpose(&self) -> Self
+    pub fn transpose(&self) -> Result<Self, Error>
     where
         K: Copy,
     {
+        if self.size() == 0 {
+            return Err(Error::EmptyMatrix);
+        }
+
         let mut data = vec![];
         for n in 0..self.columns {
             let mut vector = vec![];
@@ -100,11 +104,11 @@ impl<K> Matrix<K> {
             data.push(vector);
         }
 
-        Self {
+        Ok(Self {
             rows: self.columns,
             columns: self.rows,
             data,
-        }
+        })
     }
 
     // TODO /// Compute the row-echelon form of the given matrix
