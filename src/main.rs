@@ -330,22 +330,22 @@ fn main() {
 
     println!("\n\n---------------EX10---------------\n");
     {
-        let mut u = Matrix::from([[1., 0., 0.], [0., 1., 0.], [0., 0., 1.]]);
+        let u = Matrix::from([[1., 0., 0.], [0., 1., 0.], [0., 0., 1.]]);
         println!("{}", u.row_echelon());
         // [1.0, 0.0, 0.0][0.0, 1.0, 0.0][0.0, 0.0, 1.0]
     }
     {
-        let mut u = Matrix::from([[1., 2.], [3., 4.]]);
+        let u: Matrix<f32> = Matrix::from([[1., 2.], [3., 4.]]);
         println!("{}", u.row_echelon());
         // [1.0, 0.0][0.0, 1.0]
     }
     {
-        let mut u = Matrix::from([[1., 2.], [2., 4.]]);
+        let u = Matrix::from([[1., 2.], [2., 4.]]);
         println!("{}", u.row_echelon());
         // [1.0, 2.0][0.0, 0.0]
     }
     {
-        let mut u = Matrix::from([
+        let u = Matrix::from([
             [8., 5., -2., 4., 28.],
             [4., 2.5, 20., 4., -4.],
             [8., 5., 1., 4., 17.],
