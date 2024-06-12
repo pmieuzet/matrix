@@ -49,7 +49,6 @@ impl<K> Vector<K> {
     }
 
     /// Return a scalar product of two vectors
-    //TODO: voir sans to owned?
     pub fn dot(&self, v: &Vector<K>) -> Result<K, Error>
     where
         K: Mul<Output = K> + Add<Output = K> + Copy + RealNumber,
