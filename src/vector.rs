@@ -123,6 +123,9 @@ pub trait DivSafe {
 }
 impl DivSafe for f32 {
     fn div(self, rhs: f32) -> Result<f32, Error> {
+        if rhs == 0.0 {
+            return Err(Error::DivisionByZero);
+        }
         Ok(self / rhs)
     }
 }
@@ -133,6 +136,8 @@ where
     fn div(self, rhs: f32) -> Result<f32, Error> {
         if self.y != 0.0 {
             return Err(Error::NotImaginaryPartOfComplexNumber);
+        } else if rhs == 0.0 {
+            return Err(Error::DivisionByZero);
         }
         Ok(self.x / rhs)
     }

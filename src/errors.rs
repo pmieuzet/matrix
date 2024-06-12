@@ -16,4 +16,6 @@ pub enum Error {
     NullDeterminantMatrix,
     #[error("Error: The imaginary part is not null")]
     NotImaginaryPartOfComplexNumber,
+    #[error("Error: The division by zero is not allowed.")]
+    DivisionByZero,
 }
