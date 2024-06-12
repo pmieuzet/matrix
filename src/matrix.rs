@@ -353,8 +353,12 @@ impl<K> Matrix<K> {
 
 /// Compute the addition of two matrix
 impl<K: Add<Output = K> + Clone> Add for Matrix<K> {
-    type Output = Self;
+    type Output = Result<Self, Error>;
     fn add(self, rhs: Self) -> Self::Output {
+        if self.rows != rhs.rows || self.columns != rhs.columns {
+            return Err(Error::NotSameSizeMatrix);
+        }
+
         let mut data = vec![];
         for (vec1, vec2) in self.data.into_iter().zip(rhs.data.into_iter()) {
             let mut vector = vec![];
@@ -364,18 +368,22 @@ impl<K: Add<Output = K> + Clone> Add for Matrix<K> {
             data.push(vector);
         }
 
-        Self {
+        Ok(Self {
             rows: self.rows,
             columns: self.columns,
             data,
-        }
+        })
     }
 }
 
 /// Compute the subtraction of a matrix by another matrix
 impl<K: Sub<Output = K> + Clone> Sub for Matrix<K> {
-    type Output = Self;
+    type Output = Result<Self, Error>;
     fn sub(self, rhs: Self) -> Self::Output {
+        if self.rows != rhs.rows || self.columns != rhs.columns {
+            return Err(Error::NotSameSizeMatrix);
+        }
+
         let mut data = vec![];
         for (vec1, vec2) in self.data.into_iter().zip(rhs.data.into_iter()) {
             let mut vector = vec![];
@@ -385,11 +393,11 @@ impl<K: Sub<Output = K> + Clone> Sub for Matrix<K> {
             data.push(vector);
         }
 
-        Self {
+        Ok(Self {
             rows: self.rows,
             columns: self.columns,
             data,
-        }
+        })
     }
 }
 

@@ -20,4 +20,6 @@ pub enum Error {
     DivisionByZero,
     #[error("Error: The matrix is empty.")]
     EmptyMatrix,
+    #[error("Error: The two matrices are not the same size.")]
+    NotSameSizeMatrix,
 }

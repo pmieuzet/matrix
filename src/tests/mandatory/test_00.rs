@@ -1,5 +1,6 @@
 #[cfg(test)]
 mod test_vector_00 {
+    use crate::errors::Error;
     use crate::vector::Vector;
     use std::ops::{Add, Mul, Sub};
 
@@ -8,7 +9,7 @@ mod test_vector_00 {
         let u = Vector::from([2., 3.]);
         let v = Vector::from([5., 7.]);
         let result = u.add(v);
-        let expected = Vector::from([7., 10.]);
+        let expected = Ok(Vector::from([7., 10.]));
         assert_eq![result, expected];
     }
     #[test]
@@ -16,7 +17,7 @@ mod test_vector_00 {
         let u = Vector::from([0., 0.]);
         let v = Vector::from([0., 0.]);
         let result = u.add(v);
-        let expected = Vector::from([0., 0.]);
+        let expected = Ok(Vector::from([0., 0.]));
         assert_eq![result, expected];
     }
     #[test]
@@ -24,7 +25,7 @@ mod test_vector_00 {
         let u = Vector::from([-1., 1.]);
         let v = Vector::from([-9., 9.]);
         let result = u.add(v);
-        let expected = Vector::from([-10., 10.]);
+        let expected = Ok(Vector::from([-10., 10.]));
         assert_eq![result, expected];
     }
     #[test]
@@ -32,7 +33,7 @@ mod test_vector_00 {
         let u = Vector::from([2.02, 3.03]);
         let v = Vector::from([5.55, 7.7]);
         let result = u.add(v);
-        let expected = Vector::from([7.57, 10.73]);
+        let expected = Ok(Vector::from([7.57, 10.73]));
         assert_eq![result, expected];
     }
     #[test]
@@ -40,7 +41,7 @@ mod test_vector_00 {
         let u = Vector::from([2., 3.]);
         let v = Vector::from([5., 7.]);
         let result = u.sub(v);
-        let expected = Vector::from([-3., -4.]);
+        let expected = Ok(Vector::from([-3., -4.]));
         assert_eq![result, expected];
     }
     #[test]
@@ -48,7 +49,7 @@ mod test_vector_00 {
         let u = Vector::from([0., 0.]);
         let v = Vector::from([5., -5.]);
         let result = u.sub(v);
-        let expected = Vector::from([-5., 5.]);
+        let expected = Ok(Vector::from([-5., 5.]));
         assert_eq![result, expected];
     }
     #[test]
@@ -56,7 +57,7 @@ mod test_vector_00 {
         let u = Vector::from([-5., -5.]);
         let v = Vector::from([-5., 5.]);
         let result = u.sub(v);
-        let expected = Vector::from([0., -10.]);
+        let expected = Ok(Vector::from([0., -10.]));
         assert_eq![result, expected];
     }
     #[test]
@@ -64,7 +65,15 @@ mod test_vector_00 {
         let u = Vector::from([2.02, 3.03]);
         let v = Vector::from([5.55, 7.7]);
         let result = u.sub(v);
-        let expected = Vector::from([-3.53, -4.67]);
+        let expected = Ok(Vector::from([-3.53, -4.67]));
+        assert_eq![result, expected];
+    }
+    #[test]
+    fn test_00_sub_05() {
+        let u = Vector::from([2.02, 3.03]);
+        let v = Vector::from([5.55]);
+        let result = u.sub(v);
+        let expected = Err(Error::NotSameSize);
         assert_eq![result, expected];
     }
     #[test]
@@ -121,7 +130,7 @@ mod test_matrix_01 {
         let u = Matrix::from([[1., 2.], [3., 4.]]);
         let v = Matrix::from([[7., 4.], [-2., 2.]]);
         let result = u.add(v);
-        let expected = Matrix::from([[8., 6.], [1., 6.]]);
+        let expected = Ok(Matrix::from([[8., 6.], [1., 6.]]));
         assert_eq![result, expected];
     }
 
@@ -130,7 +139,7 @@ mod test_matrix_01 {
         let u = Matrix::from([[-1., -2.], [-3., 4.]]);
         let v = Matrix::from([[0., -2.], [2., -2.]]);
         let result = u.add(v);
-        let expected = Matrix::from([[-1., -4.], [-1., 2.]]);
+        let expected = Ok(Matrix::from([[-1., -4.], [-1., 2.]]));
         assert_eq![result, expected];
     }
 
@@ -139,7 +148,7 @@ mod test_matrix_01 {
         let u = Matrix::from([[1.1, 2.0], [3.2, 4.2]]);
         let v = Matrix::from([[7.7, 4.4], [-2.2, 2.2]]);
         let result = u.add(v);
-        let expected = Matrix::from([[8.8, 6.4], [1.0, 6.4]]);
+        let expected = Ok(Matrix::from([[8.8, 6.4], [1.0, 6.4]]));
         assert_eq![result, expected];
     }
 
@@ -148,7 +157,7 @@ mod test_matrix_01 {
         let u = Matrix::from([[1., 2.], [3., 4.]]);
         let v = Matrix::from([[7., 4.], [-2., 2.]]);
         let result = u.sub(v);
-        let expected = Matrix::from([[-6.0, -2.0], [5.0, 2.0]]);
+        let expected = Ok(Matrix::from([[-6.0, -2.0], [5.0, 2.0]]));
         assert_eq![result, expected];
     }
 
@@ -157,7 +166,7 @@ mod test_matrix_01 {
         let u = Matrix::from([[1., -2.], [3., -4.]]);
         let v = Matrix::from([[-1., -2.], [-2., 2.]]);
         let result = u.sub(v);
-        let expected = Matrix::from([[2.0, 0.0], [5.0, -6.0]]);
+        let expected = Ok(Matrix::from([[2.0, 0.0], [5.0, -6.0]]));
         assert_eq![result, expected];
     }
 
@@ -166,7 +175,7 @@ mod test_matrix_01 {
         let u = Matrix::from([[1.1, 2.4], [3.2, 4.2]]);
         let v = Matrix::from([[7.7, 4.0], [-2.2, 2.2]]);
         let result = u.sub(v);
-        let expected = Matrix::from([[-6.6, -1.6], [5.4, 2.0]]);
+        let expected = Ok(Matrix::from([[-6.6, -1.6], [5.4, 2.0]]));
         assert_eq![result, expected];
     }
 

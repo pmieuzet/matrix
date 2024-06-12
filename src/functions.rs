@@ -3,12 +3,13 @@ use std::ops::{Add, Div, Mul, Sub};
 use crate::{
     complex_number::{ComplexNumber, RealNumber},
     errors::Error,
-    vector::{DivSafe, Vector},
+    ops_safe::{AddSafe, DivSafe, SubSafe},
+    vector::Vector,
 };
 
 /// Creation of a new vector by multiplying each vector by a corresponding scalar, then adding the results
 /// # Arguments
-/// 
+///
 pub fn linear_combination<K>(u: &[Vector<K>], coefs: &[K]) -> Result<Vector<K>, Error>
 where
     K: Clone + std::ops::Mul<Output = K> + std::ops::Add<Output = K>,
@@ -21,26 +22,23 @@ where
         .into_iter()
         .zip(coefs.to_owned().into_iter())
         .map(|(a, coef)| a.mul(coef))
-        .reduce(|acc, a| acc.add(a))
+        .reduce(|acc, a| acc.add(a).unwrap())
         .ok_or(Error::EmptyVector)
 }
 
 /// Linear interpolation: estimate the value of a function between two given points.
 pub fn lerp<V>(u: V, v: V, t: f32) -> Result<V, Error>
 where
-    V: std::ops::Add<Output = V>
-        + std::ops::Mul<f32, Output = V>
-        + std::ops::Sub<Output = V>
-        + Clone,
+    V: AddSafe + std::ops::Mul<f32, Output = V> + SubSafe + Clone,
 {
     if t < 0. || t > 1. {
         return Err(Error::WrongRangeScalar);
     }
 
-    Ok(u.clone() + (v - u) * t)
+    AddSafe::add(u.clone(), SubSafe::sub(v, u)? * t)
 }
 
-/// compute the cosine of the angle between the two vectors u and v
+/// compute the cosine o f the angle between the two vectors u and v
 pub fn angle_cos<K>(u: &Vector<K>, v: &Vector<K>) -> Result<f32, Error>
 where
     K: DivSafe + RealNumber + Mul<Output = K> + Add<Output = K>,

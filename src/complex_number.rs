@@ -1,3 +1,4 @@
+use crate::errors::Error;
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, Sub, SubAssign};
 
 #[derive(Clone, Debug, Copy, PartialEq)]
@@ -75,8 +76,8 @@ where
     type Output = Self;
     fn sub(self, rhs: Self) -> Self::Output {
         Self {
-            x: self.x - rhs.x,
-            y: self.y - rhs.y,
+            x: (self.x - rhs.x),
+            y: (self.y - rhs.y),
         }
     }
 }

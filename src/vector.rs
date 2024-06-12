@@ -86,60 +86,43 @@ impl<V: RealNumber> Vector<V> {
 
 /// Compute the addition of two vectors
 impl<K: Add<Output = K>> Add for Vector<K> {
-    type Output = Self;
+    type Output = Result<Self, Error>;
     fn add(self, rhs: Self) -> Self::Output {
+        if self.size != rhs.size {
+            return Err(Error::NotSameSize);
+        }
+
         let data = self
             .data
             .into_iter()
             .zip(rhs.data.into_iter())
             .map(|(a, b)| a + b)
             .collect::<Vec<K>>();
-        Self {
+        Ok(Self {
             size: data.len(),
             data,
-        }
+        })
     }
 }
 
 /// Compute the subtraction of a vector by another vector
 impl<K: Sub<Output = K>> Sub for Vector<K> {
-    type Output = Self;
+    type Output = Result<Self, Error>;
     fn sub(self, rhs: Self) -> Self::Output {
+        if self.size != rhs.size {
+            return Err(Error::NotSameSize);
+        }
+
         let data = self
             .data
             .into_iter()
             .zip(rhs.data.into_iter())
             .map(|(a, b)| a - b)
             .collect::<Vec<K>>();
-        Self {
+        Ok(Self {
             size: data.len(),
             data,
-        }
-    }
-}
-
-pub trait DivSafe {
-    fn div(self, rhs: f32) -> Result<f32, Error>;
-}
-impl DivSafe for f32 {
-    fn div(self, rhs: f32) -> Result<f32, Error> {
-        if rhs == 0.0 {
-            return Err(Error::DivisionByZero);
-        }
-        Ok(self / rhs)
-    }
-}
-impl<R> DivSafe for ComplexNumber<R>
-where
-    R: RealNumber + PartialEq<f32> + Div<f32, Output = f32>,
-{
-    fn div(self, rhs: f32) -> Result<f32, Error> {
-        if self.y != 0.0 {
-            return Err(Error::NotImaginaryPartOfComplexNumber);
-        } else if rhs == 0.0 {
-            return Err(Error::DivisionByZero);
-        }
-        Ok(self.x / rhs)
+        })
     }
 }
 

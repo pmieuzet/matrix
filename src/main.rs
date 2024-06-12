@@ -11,6 +11,7 @@ mod complex_number;
 mod errors;
 mod functions;
 mod matrix;
+mod ops_safe;
 mod projection;
 mod tests;
 mod vector;
@@ -33,13 +34,19 @@ fn main() {
     {
         let u = Vector::from([2., 3.]);
         let v = Vector::from([5., 7.]);
-        println!("{}", u.add(v));
+        match u.add(v) {
+            Ok(result) => println!("{}", result),
+            Err(e) => eprintln!("{e}"),
+        }
         // [7.0][10.0]
     }
     {
         let u = Vector::from([2., 3.]);
         let v = Vector::from([5., 7.]);
-        println!("{}", u.sub(v));
+        match u.sub(v) {
+            Ok(result) => println!("{}", result),
+            Err(e) => eprintln!("{e}"),
+        }
         // [-3.0][-4.0]
     }
     {
@@ -50,13 +57,19 @@ fn main() {
     {
         let u = Matrix::from([[1., 2.], [3., 4.]]);
         let v = Matrix::from([[7., 4.], [-2., 2.]]);
-        println!("{}", u.add(v));
+        match u.add(v) {
+            Ok(result) => println!("{}", result),
+            Err(e) => eprintln!("{e}"),
+        }
         // [8.0, 6.0][1.0, 6.0]
     }
     {
         let u = Matrix::from([[1., 2.], [3., 4.]]);
         let v = Matrix::from([[7., 4.], [-2., 2.]]);
-        println!("{}", u.sub(v));
+        match u.sub(v) {
+            Ok(result) => println!("{}", result),
+            Err(e) => eprintln!("{e}"),
+        }
         // [-6.0, -2.0][5.0, 2.0]
     }
     {
@@ -428,7 +441,8 @@ fn main() {
         // 2
     }
     {
-        let u = Matrix::from([[8., 5., -2.], [4., 7., 20.], [7., 6., 1.], [21., 18., 7.]]);
+        let u: Matrix<f32> =
+            Matrix::from([[8., 5., -2.], [4., 7., 20.], [7., 6., 1.], [21., 18., 7.]]);
         println!("{}", u.rank());
         // 3
     }
@@ -443,7 +457,10 @@ fn main() {
             ComplexNumber { x: 4., y: 8. },
             ComplexNumber { x: 1., y: 2. },
         ]);
-        println!("{}", u.add(v));
+        match u.add(v) {
+            Ok(result) => println!("{}", result),
+            Err(e) => eprintln!("{e}"),
+        }
         // [5.0, 10.0][3.0, 3.0]
     }
     {
@@ -455,7 +472,10 @@ fn main() {
             ComplexNumber { x: 4., y: 8. },
             ComplexNumber { x: 1., y: 2. },
         ]);
-        println!("{}", u.sub(v));
+        match u.sub(v) {
+            Ok(result) => println!("{}", result),
+            Err(e) => eprintln!("{e}"),
+        }
         // [-3.0, -6.0][1.0, -1.0]
     }
     {
@@ -487,7 +507,10 @@ fn main() {
                 ComplexNumber { x: -2., y: 2. },
             ],
         ]);
-        println!("{}", u.add(v));
+        match u.add(v) {
+            Ok(result) => println!("{}", result),
+            Err(e) => eprintln!("{e}"),
+        }
     }
     {
         let u = Matrix::from([
@@ -510,7 +533,10 @@ fn main() {
                 ComplexNumber { x: -2., y: 2. },
             ],
         ]);
-        println!("{}", u.sub(v));
+        match u.sub(v) {
+            Ok(result) => println!("{}", result),
+            Err(e) => eprintln!("{e}"),
+        }
     }
     {
         let u = Matrix::from([
