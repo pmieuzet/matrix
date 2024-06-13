@@ -1,9 +1,9 @@
-use std::ops::{Add, Div, Mul, Sub};
+use std::ops::{Add, Mul, Sub};
 
 use crate::{
-    complex_number::{ComplexNumber, RealNumber},
+    complex_number::RealNumber,
     errors::Error,
-    ops_safe::{AddSafe, DivSafe, SubSafe},
+    ops_safe::{AddSafe, DivSafe, MulByf32, SubSafe},
     vector::Vector,
 };
 
@@ -29,13 +29,13 @@ where
 /// Linear interpolation: estimate the value of a function between two given points.
 pub fn lerp<V>(u: V, v: V, t: f32) -> Result<V, Error>
 where
-    V: AddSafe + Mul<f32, Output = V> + SubSafe + Clone,
+    V: AddSafe + MulByf32 + SubSafe + Clone,
 {
     if t < 0. || t > 1. {
         return Err(Error::WrongRangeScalar);
     }
 
-    AddSafe::add(u.clone(), SubSafe::sub(v, u)? * t)
+    AddSafe::add(u.clone(), MulByf32::mul(SubSafe::sub(v, u)?, t))
 }
 
 /// compute the cosine o f the angle between the two vectors u and v

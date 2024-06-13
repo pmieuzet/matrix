@@ -37,7 +37,7 @@ mod test_02 {
         assert_eq!(result, expected);
     }
     #[test]
-    fn test_02_06() {
+    fn test_02_04() {
         let result = lerp(
             ComplexNumber { x: 0., y: 10. },
             ComplexNumber { x: 10., y: 0. },
@@ -47,7 +47,7 @@ mod test_02 {
         assert_eq!(result, expected);
     }
     #[test]
-    fn test_02_09() {
+    fn test_02_05() {
         let result = lerp(
             ComplexNumber { x: 0., y: 10. },
             ComplexNumber { x: 10., y: 0. },
@@ -57,7 +57,7 @@ mod test_02 {
         assert_eq!(result, expected);
     }
     #[test]
-    fn test_02_10() {
+    fn test_02_6() {
         let result = lerp(
             ComplexNumber { x: 0., y: 10. },
             ComplexNumber { x: 10., y: 0. },
@@ -66,31 +66,57 @@ mod test_02 {
         let expected = Err(Error::WrongRangeScalar);
         assert_eq!(result, expected);
     }
-    // #[test]
-    // fn test_02_11() {
-    //     let e1 = Vector::from([
-    //         ComplexNumber { x: 0., y: 10. },
-    //         ComplexNumber { x: 1., y: 2. },
-    //     ]);
-    //     let e2 = Vector::from([
-    //         ComplexNumber { x: 10., y: 0. },
-    //         ComplexNumber { x: 0., y: 10. },
-    //     ]);
+    #[test]
+    fn test_02_7() {
+        let e1 = Vector::from([
+            ComplexNumber { x: 0., y: 10. },
+            ComplexNumber { x: 1., y: 0. },
+        ]);
+        let e2 = Vector::from([
+            ComplexNumber { x: 10., y: 0. },
+            ComplexNumber { x: 0., y: 1. },
+        ]);
 
-    //     let result = lerp(e1, e2, 0.5);
-    //     let expected = Ok(Vector::from([
-    //         ComplexNumber { x: 0., y: 10. },
-    //         ComplexNumber { x: 0., y: 10. },
-    //     ]));
-    //     assert_eq!(result, expected);
-    // }
-    // #[test]
-    // fn test_02_12() {
-    //     let e1 = Matrix::from([[2., 1.], [3., 4.]]);
-    //     let e2 = Matrix::from([[20., 10.], [30., 40.]]);
-
-    //     let result = lerp(e1, e2, 0.5);
-    //     let expected = Ok(Matrix::from([[11., 5.5], [16.5, 22.]]));
-    //     assert_eq!(result, expected);
-    // }
+        let result = lerp(e1, e2, 0.5);
+        let expected = Ok(Vector::from([
+            ComplexNumber { x: 5., y: 5. },
+            ComplexNumber { x: 0.5, y: 0.5 },
+        ]));
+        assert_eq!(result, expected);
+    }
+    #[test]
+    fn test_02_8() {
+        let e1 = Matrix::from([
+            [
+                ComplexNumber { x: 0., y: 10. },
+                ComplexNumber { x: 1., y: 0. },
+            ],
+            [
+                ComplexNumber { x: 0., y: 10. },
+                ComplexNumber { x: 0., y: 0. },
+            ],
+        ]);
+        let e2 = Matrix::from([
+            [
+                ComplexNumber { x: 10., y: 20. },
+                ComplexNumber { x: 1., y: 0. },
+            ],
+            [
+                ComplexNumber { x: 10., y: 0. },
+                ComplexNumber { x: 10., y: 10. },
+            ],
+        ]);
+        let result = lerp(e1, e2, 0.5);
+        let expected = Ok(Matrix::from([
+            [
+                ComplexNumber { x: 5., y: 15. },
+                ComplexNumber { x: 1., y: 0. },
+            ],
+            [
+                ComplexNumber { x: 5., y: 5. },
+                ComplexNumber { x: 5., y: 5. },
+            ],
+        ]));
+        assert_eq!(result, expected);
+    }
 }

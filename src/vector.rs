@@ -1,14 +1,9 @@
-use crate::{
-    complex_number::{ComplexNumber, RealNumber},
-    errors::Error,
-    matrix,
-};
+use crate::{complex_number::RealNumber, errors::Error, matrix};
 
 use matrix::Matrix;
 use std::{
     fmt::Display,
-    ops::{Add, Div, Mul, Sub},
-    process::Output,
+    ops::{Add, Mul, Sub},
 };
 
 #[derive(Clone, Debug, PartialEq)]

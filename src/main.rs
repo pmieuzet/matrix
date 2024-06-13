@@ -789,7 +789,6 @@ fn main() {
                 ComplexNumber { x: -17., y: 1. },
             ],
         ]);
-        let u = Matrix::from([[2., -9., 3.], [13., 11., -17.]]);
         match u.transpose() {
             Ok(transpose) => println!("{}", transpose),
             Err(e) => eprintln!("{e}"),
@@ -828,7 +827,6 @@ fn main() {
                 ComplexNumber { x: 4., y: 0. },
             ],
         ]);
-        let mut u = Matrix::from([[1., 2.], [3., 4.]]);
         println!("{}", u.row_echelon());
     }
 

@@ -56,7 +56,10 @@ where
         self - rhs
     }
 }
-impl SubSafe for Matrix<f32> {
+impl<R> SubSafe for Matrix<R>
+where
+    R: Sub<Output = R> + RealNumber,
+{
     fn sub(self, rhs: Self) -> Result<Self, Error> {
         self - rhs
     }
@@ -89,8 +92,57 @@ where
         self + rhs
     }
 }
-impl AddSafe for Matrix<f32> {
+impl<R> AddSafe for Matrix<R>
+where
+    R: Add<Output = R> + RealNumber,
+{
     fn add(self, rhs: Self) -> Result<Self, Error> {
         self + rhs
+    }
+}
+
+pub trait MulByf32 {
+    fn mul(self, rhs: f32) -> Self;
+}
+impl MulByf32 for f32 {
+    fn mul(self, rhs: f32) -> Self {
+        self * rhs
+    }
+}
+impl<R> MulByf32 for ComplexNumber<R>
+where
+    R: Mul<f32, Output = R> + RealNumber,
+{
+    fn mul(self, rhs: f32) -> Self {
+        self * rhs
+    }
+}
+impl<R> MulByf32 for Vector<R>
+where
+    R: Mul<f32, Output = R> + Clone,
+{
+    fn mul(self, rhs: f32) -> Self {
+        let data = self.data.iter().map(|x| x.clone() * rhs).collect();
+        Self {
+            size: self.size,
+            data,
+        }
+    }
+}
+impl<R> MulByf32 for Matrix<R>
+where
+    R: Mul<f32, Output = R> + Copy,
+{
+    fn mul(self, rhs: f32) -> Self {
+        let data = self
+            .data
+            .iter()
+            .map(|x| x.iter().map(|y| *y * rhs.clone()).collect())
+            .collect();
+        Self {
+            columns: self.columns,
+            rows: self.rows,
+            data,
+        }
     }
 }

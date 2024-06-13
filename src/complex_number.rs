@@ -1,4 +1,3 @@
-use crate::errors::Error;
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, Sub, SubAssign};
 
 #[derive(Clone, Debug, Copy, PartialEq)]
