@@ -745,7 +745,7 @@ fn main() {
         }
     }
 
-    println!("\n\n---------------EX08---------------\n");
+    println!("\n\n---------------EX08-BONUS--------------\n");
     {
         let u: Matrix<ComplexNumber<f32>> = Matrix::from([
             [ComplexNumber { x: 1., y: 0. }],
@@ -775,7 +775,7 @@ fn main() {
         }
     }
 
-    println!("\n\n---------------EX09---------------\n");
+    println!("\n\n---------------EX09-BONUS--------------\n");
     {
         let u: Matrix<ComplexNumber<f32>> = Matrix::from([
             [
@@ -796,7 +796,7 @@ fn main() {
         }
     }
 
-    println!("\n\n---------------EX10---------------\n");
+    println!("\n\n---------------EX10-BONUS--------------\n");
     {
         let u: Matrix<ComplexNumber<f32>> = Matrix::from([
             [
@@ -832,7 +832,7 @@ fn main() {
         println!("{}", u.row_echelon());
     }
 
-    println!("\n\n---------------EX11---------------\n");
+    println!("\n\n---------------EX11-BONUS--------------\n");
     {
         let u: Matrix<ComplexNumber<f32>> = Matrix::from([
             [
@@ -874,7 +874,7 @@ fn main() {
         }
     }
 
-    println!("\n\n---------------EX12---------------\n");
+    println!("\n\n---------------EX12-BONUS--------------\n");
     {
         let u: Matrix<ComplexNumber<f32>> = Matrix::from([
             [

@@ -1,6 +1,5 @@
 #[cfg(test)]
 mod test_13 {
-    use crate::errors::Error;
     use crate::matrix::Matrix;
 
     #[test]

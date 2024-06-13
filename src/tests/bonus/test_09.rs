@@ -1,20 +1,45 @@
 #[cfg(test)]
 mod test_09 {
+    use crate::complex_number::ComplexNumber;
     use crate::errors::Error;
     use crate::matrix::Matrix;
 
     #[test]
     fn test_09_01() {
-        let u = Matrix::from([[2., -9., 3.], [13., 11., -17.]]);
+        let u = Matrix::from([
+            [
+                ComplexNumber { x: 1., y: 2. },
+                ComplexNumber { x: 3., y: 4. },
+                ComplexNumber { x: 5., y: 6. },
+            ],
+            [
+                ComplexNumber { x: 5., y: 6. },
+                ComplexNumber { x: 4., y: 3. },
+                ComplexNumber { x: 1., y: 2. },
+            ],
+        ]);
 
         let result = u.transpose();
-        let expected = Ok(Matrix::from([[2., 13.], [-9., 11.], [3., -17.]]));
+        let expected = Ok(Matrix::from([
+            [
+                ComplexNumber { x: 1., y: 2. },
+                ComplexNumber { x: 5., y: 6. },
+            ],
+            [
+                ComplexNumber { x: 3., y: 4. },
+                ComplexNumber { x: 4., y: 3. },
+            ],
+            [
+                ComplexNumber { x: 5., y: 6. },
+                ComplexNumber { x: 1., y: 2. },
+            ],
+        ]));
 
         assert_eq!(result, expected);
     }
     #[test]
     fn test_09_02() {
-        let u = Matrix::<f32>::from([[]]);
+        let u = Matrix::<ComplexNumber<f32>>::from([[]]);
 
         let result = u.transpose();
         let expected = Err(Error::EmptyMatrix);
@@ -23,18 +48,24 @@ mod test_09 {
     }
     #[test]
     fn test_09_03() {
-        let u = Matrix::<f32>::from([[0., 1.]]);
+        let u = Matrix::<ComplexNumber<f32>>::from([[
+            ComplexNumber { x: 5., y: 6. },
+            ComplexNumber { x: 0., y: 1. },
+        ]]);
 
         let result = u.transpose();
-        let expected = Ok(Matrix::from([[0.], [1.]]));
+        let expected = Ok(Matrix::from([
+            [ComplexNumber { x: 5., y: 6. }],
+            [ComplexNumber { x: 0., y: 1. }],
+        ]));
         assert_eq!(result, expected);
     }
     #[test]
     fn test_09_04() {
-        let u = Matrix::<f32>::from([[0.]]);
+        let u = Matrix::<ComplexNumber<f32>>::from([[ComplexNumber { x: 0., y: 1. }]]);
 
         let result = u.transpose();
-        let expected = Ok(Matrix::from([[0.]]));
+        let expected = Ok(Matrix::from([[ComplexNumber { x: 0., y: 1. }]]));
         assert_eq!(result, expected);
     }
 }

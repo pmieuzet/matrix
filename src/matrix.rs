@@ -152,9 +152,9 @@ impl<K> Matrix<K> {
         let mut add = true;
         for n in 0..self.columns {
             if add == true {
-                det += self.data[0][n] * self.get_sub_matrix(n).determinant().unwrap();
+                det += self.data[0][n] * self.get_sub_matrix(n).determinant()?;
             } else {
-                det -= self.data[0][n] * self.get_sub_matrix(n).determinant().unwrap();
+                det -= self.data[0][n] * self.get_sub_matrix(n).determinant()?;
             }
             add = !add;
         }

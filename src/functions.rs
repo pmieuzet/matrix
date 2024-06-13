@@ -29,7 +29,7 @@ where
 /// Linear interpolation: estimate the value of a function between two given points.
 pub fn lerp<V>(u: V, v: V, t: f32) -> Result<V, Error>
 where
-    V: AddSafe + std::ops::Mul<f32, Output = V> + SubSafe + Clone,
+    V: AddSafe + Mul<f32, Output = V> + SubSafe + Clone,
 {
     if t < 0. || t > 1. {
         return Err(Error::WrongRangeScalar);

@@ -1,38 +1,68 @@
 #[cfg(test)]
 mod test_08 {
+    use crate::complex_number::ComplexNumber;
     use crate::errors::Error;
     use crate::matrix::Matrix;
 
     #[test]
     fn test_08_01() {
-        let u = Matrix::from([[1., 0.], [0., 1.]]);
+        let u = Matrix::from([
+            [
+                ComplexNumber { x: 1., y: 1. },
+                ComplexNumber { x: 0., y: 1. },
+            ],
+            [
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 1., y: 0. },
+            ],
+        ]);
 
         let result = u.trace();
-        let expected = Ok(2.);
+        let expected = Ok(ComplexNumber { x: 2., y: 1. });
 
         assert_eq!(result, expected);
     }
     #[test]
     fn test_08_02() {
-        let u = Matrix::from([[2., -5., 0.], [4., 3., 7.], [-2., 3., 4.]]);
+        let u = Matrix::from([
+            [
+                ComplexNumber { x: 6., y: 1. },
+                ComplexNumber { x: 0., y: 1. },
+                ComplexNumber { x: 12., y: 0. },
+            ],
+            [
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 8., y: 12. },
+                ComplexNumber { x: 1., y: 0. },
+            ],
+            [
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 9., y: 9. },
+                ComplexNumber { x: 6., y: 0. },
+            ],
+        ]);
 
         let result = u.trace();
-        let expected = Ok(9.);
+        let expected = Ok(ComplexNumber { x: 20., y: 13. });
 
         assert_eq!(result, expected);
     }
     #[test]
     fn test_08_03() {
-        let u = Matrix::from([[-2., -8., 4.], [1., -23., 4.], [0., 6., 4.]]);
-
-        let result = u.trace();
-        let expected = Ok(-21.);
-
-        assert_eq!(result, expected);
-    }
-    #[test]
-    fn test_08_04() {
-        let u = Matrix::from([[-2., -8., 4.], [1., -23., 4.]]);
+        let u = Matrix::from([
+            [
+                ComplexNumber { x: 6., y: 1. },
+                ComplexNumber { x: 0., y: 1. },
+            ],
+            [
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 8., y: 12. },
+            ],
+            [
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 9., y: 9. },
+            ],
+        ]);
 
         let result = u.trace();
         let expected = Err(Error::NotSquareMatrix);
@@ -40,8 +70,8 @@ mod test_08 {
         assert_eq!(result, expected);
     }
     #[test]
-    fn test_08_05() {
-        let u = Matrix::<f32>::from([[]]);
+    fn test_08_04() {
+        let u = Matrix::<ComplexNumber<f32>>::from([[]]);
 
         let result = u.trace();
         let expected = Err(Error::EmptyMatrix);
@@ -49,11 +79,26 @@ mod test_08 {
         assert_eq!(result, expected);
     }
     #[test]
-    fn test_08_06() {
-        let u = Matrix::<f32>::from([[0., 2., 3.], [1., 0., 3.], [1., 2., 0.]]);
-
+    fn test_08_05() {
+        let u = Matrix::from([
+            [
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 0., y: 1. },
+                ComplexNumber { x: 9., y: 9. },
+            ],
+            [
+                ComplexNumber { x: 8., y: 12. },
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 9., y: 9. },
+            ],
+            [
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 9., y: 9. },
+                ComplexNumber { x: 0., y: 0. },
+            ],
+        ]);
         let result = u.trace();
-        let expected = Ok(0.);
+        let expected = Ok(ComplexNumber { x: 0., y: 0. });
 
         assert_eq!(result, expected);
     }
