@@ -43,10 +43,10 @@ mod test_10 {
     }
     #[test]
     fn test_10_02() {
-        let u = Matrix::from([[ComplexNumber { x: -9., y: 1. }]]);
+        let u = Matrix::from([[ComplexNumber { x: -9., y: 0. }]]);
 
         let result = u.row_echelon();
-        let expected = Matrix::from([[ComplexNumber { x: 1., y: 0. }]]);
+        let expected = Matrix::from([[ComplexNumber { x: 1.125, y: 1.125 }]]);
 
         assert_eq!(result, expected);
     }

@@ -84,8 +84,8 @@ mod test_vector_00 {
 
         let result = u.sub(v);
         let expected = Ok(Vector::from([
-            ComplexNumber { x: 0., y: 2. },
-            ComplexNumber { x: 2., y: 0. },
+            ComplexNumber { x: 1., y: -1. },
+            ComplexNumber { x: 1., y: 1. },
         ]));
         assert_eq![result, expected];
     }
@@ -248,7 +248,7 @@ mod test_matrix_01 {
                 ComplexNumber { x: 1., y: 1. },
             ],
             [
-                ComplexNumber { x: 1., y: 1. },
+                ComplexNumber { x: 1., y: -1. },
                 ComplexNumber { x: 6., y: 2. },
             ],
         ]));

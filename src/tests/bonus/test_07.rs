@@ -72,10 +72,7 @@ mod test_07 {
             ComplexNumber { x: 1., y: 1. },
             ComplexNumber { x: 0., y: 0. },
         ]]);
-        let v = Vector::from([
-            ComplexNumber { x: 4., y: 2. },
-            ComplexNumber { x: 2., y: 0. },
-        ]);
+        let v = Vector::from([ComplexNumber { x: 4., y: 2. }]);
 
         let result = u.mul(v);
         let expected = Err(Error::WrongSizeMatrix);

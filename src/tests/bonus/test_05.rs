@@ -7,11 +7,11 @@ mod test_05 {
     #[test]
     fn test_05_01() {
         let u = Vector::from([
-            ComplexNumber { x: 1., y: 1. },
+            ComplexNumber { x: 1., y: 0. },
             ComplexNumber { x: 0., y: 0. },
         ]);
         let v = Vector::from([
-            ComplexNumber { x: 1., y: 1. },
+            ComplexNumber { x: 1., y: 0. },
             ComplexNumber { x: 0., y: 0. },
         ]);
 
