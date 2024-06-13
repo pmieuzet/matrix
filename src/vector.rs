@@ -137,24 +137,3 @@ impl<K: Mul<Output = K> + Clone> Mul<K> for Vector<K> {
         }
     }
 }
-
-// impl<K: Mul<f32, Output = K>> Mul<f32> for Vector<K> {
-//     type Output = Self;
-//     fn mul(self, scalar: f32) -> Self::Output {
-//         let data = self
-//             .data
-//             .into_iter()
-//             .map(|x| x * scalar.clone())
-//             .collect::<Vec<K>>();
-//         Self {
-//             size: data.len(),
-//             data,
-//         }
-//     }
-// }
-
-// dot (output = k)
-// impl<K: Mul<Output = K> + Clone> Mul<Vector<K>> for Vector<K> {
-//     type Output = K;
-//     fn mul(self, scalar: Vector<K>) -> Self::Output {}
-// }
