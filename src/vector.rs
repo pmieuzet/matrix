@@ -8,8 +8,7 @@ use std::{
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Vector<K> {
-    pub size: usize,
-    pub data: Vec<K>,
+    pub data: Vec<K>
 }
 
 /// To print a vector on the standard output
@@ -21,26 +20,25 @@ impl<K: std::fmt::Debug> Display for Vector<K> {
 
 impl<K, const N: usize> From<[K; N]> for Vector<K> {
     fn from(data: [K; N]) -> Self {
-        Self::new(Vec::from(data), N)
+        Self::new(Vec::from(data))
+    }
+}
+
+/// To reshape a matrix into a vector
+impl<K> From<Matrix<K>> for Vector<K> {
+    fn from(value: Matrix<K>) -> Self {
+        let vector = value.data.into_iter().flatten().collect::<Vec<K>>();
+        Self { data: vector }
     }
 }
 
 impl<K> Vector<K> {
-    pub fn new(data: Vec<K>, size: usize) -> Self {
-        Vector { size, data }
+    pub fn new(data: Vec<K>) -> Self {
+        Self { data }
     }
 
     pub fn size(&self) -> usize {
-        self.size
-    }
-
-    /// To reshape a vector into a matrix
-    pub fn into_matrix(self) -> Matrix<K> {
-        Matrix {
-            rows: 1,
-            columns: self.data.len(),
-            data: vec![self.data],
-        }
+        self.data.len()
     }
 
     /// Return a scalar product of two vectors
@@ -48,7 +46,7 @@ impl<K> Vector<K> {
     where
         K: Mul<Output = K> + Add<Output = K> + Copy + RealNumber,
     {
-        if self.size != v.size {
+        if self.size() != v.size() {
             return Err(Error::NotSameSize);
         }
 
@@ -83,7 +81,7 @@ impl<V: RealNumber> Vector<V> {
 impl<K: Add<Output = K>> Add for Vector<K> {
     type Output = Result<Self, Error>;
     fn add(self, rhs: Self) -> Self::Output {
-        if self.size != rhs.size {
+        if self.size() != rhs.size() {
             return Err(Error::NotSameSize);
         }
 
@@ -93,10 +91,7 @@ impl<K: Add<Output = K>> Add for Vector<K> {
             .zip(rhs.data.into_iter())
             .map(|(a, b)| a + b)
             .collect::<Vec<K>>();
-        Ok(Self {
-            size: data.len(),
-            data,
-        })
+        Ok(Self { data })
     }
 }
 
@@ -104,7 +99,7 @@ impl<K: Add<Output = K>> Add for Vector<K> {
 impl<K: Sub<Output = K>> Sub for Vector<K> {
     type Output = Result<Self, Error>;
     fn sub(self, rhs: Self) -> Self::Output {
-        if self.size != rhs.size {
+        if self.size() != rhs.size() {
             return Err(Error::NotSameSize);
         }
 
@@ -114,10 +109,7 @@ impl<K: Sub<Output = K>> Sub for Vector<K> {
             .zip(rhs.data.into_iter())
             .map(|(a, b)| a - b)
             .collect::<Vec<K>>();
-        Ok(Self {
-            size: data.len(),
-            data,
-        })
+        Ok(Self { data })
     }
 }
 
@@ -130,9 +122,6 @@ impl<K: Mul<Output = K> + Clone> Mul<K> for Vector<K> {
             .into_iter()
             .map(|x| x * scalar.clone())
             .collect::<Vec<K>>();
-        Self {
-            size: data.len(),
-            data,
-        }
+        Self { data }
     }
 }

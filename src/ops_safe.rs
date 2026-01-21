@@ -123,10 +123,7 @@ where
 {
     fn mul(self, rhs: f32) -> Self {
         let data = self.data.iter().map(|x| x.clone() * rhs).collect();
-        Self {
-            size: self.size,
-            data,
-        }
+        Self { data }
     }
 }
 impl<R> MulByf32 for Matrix<R>

@@ -41,7 +41,7 @@ pub fn angle_cos<K>(u: &Vector<K>, v: &Vector<K>) -> Result<f32, Error>
 where
     K: DivSafe + RealNumber + Mul<Output = K> + Add<Output = K>,
 {
-    if u.size != v.size {
+    if u.size() != v.size() {
         return Err(Error::NotSameSize);
     }
 
@@ -56,7 +56,7 @@ pub fn cross_product<K>(u: &Vector<K>, v: &Vector<K>) -> Result<Vector<K>, Error
 where
     K: Mul<Output = K> + Sub<Output = K> + Copy,
 {
-    if u.size != 3 || v.size != 3 {
+    if u.size() != 3 || v.size() != 3 {
         return Err(Error::VecNotTridimensional);
     }
 
@@ -65,5 +65,5 @@ where
     data.push(u.data[2] * v.data[0] - u.data[0] * v.data[2]);
     data.push(u.data[0] * v.data[1] - u.data[1] * v.data[0]);
 
-    Ok(Vector { size: 3, data })
+    Ok(Vector { data })
 }

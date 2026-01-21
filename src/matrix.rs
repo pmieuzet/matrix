@@ -26,17 +26,28 @@ impl<K: std::fmt::Debug> Display for Matrix<K> {
 
 impl<K, const N: usize, const U: usize> From<[[K; N]; U]> for Matrix<K> {
     fn from(data: [[K; N]; U]) -> Self {
-        let mut matrice = Vec::new();
+        let mut matrix = Vec::new();
         for item in data {
-            matrice.push(Vec::from(item));
+            matrix.push(Vec::from(item));
         }
-        Self::new(matrice, U, N)
+        Self::new(matrix, U, N)
+    }
+}
+
+/// To reshape a vector into a matrix
+impl<K> From<Vector<K>> for Matrix<K> {
+    fn from(value: Vector<K>) -> Self {
+        Self {
+            rows: 1,
+            columns: value.data.len(),
+            data: vec![value.data],
+        }
     }
 }
 
 impl<K> Matrix<K> {
     pub fn new(data: Vec<Vec<K>>, rows: usize, columns: usize) -> Matrix<K> {
-        Matrix {
+        Self {
             rows,
             columns,
             data,
@@ -53,15 +64,6 @@ impl<K> Matrix<K> {
 
     pub fn is_square(&self) -> bool {
         self.rows == self.columns
-    }
-
-    //To reshape a matrix into a vector
-    pub fn into_vector(self) -> Vector<K> {
-        let vector = self.data.into_iter().flatten().collect::<Vec<K>>();
-        Vector {
-            size: vector.len(),
-            data: vector,
-        }
     }
 
     ///  Compute the trace of the given matrix
@@ -419,23 +421,20 @@ impl<K: Mul<Output = K> + Clone> Mul<K> for Matrix<K> {
 impl<K: Mul<Output = K> + AddAssign + Copy + RealNumber> Mul<Vector<K>> for Matrix<K> {
     type Output = Result<Vector<K>, Error>;
     fn mul(self, rhs: Vector<K>) -> Self::Output {
-        if self.columns != rhs.size {
+        if self.columns != rhs.size() {
             return Err(Error::WrongSizeMatrix);
         }
 
         let mut data = vec![];
         for m in 0..self.rows {
             let mut acc = self.data[m][0] * rhs.data[0];
-            for n in 1..rhs.size {
+            for n in 1..rhs.size() {
                 acc += self.data[m][n] * rhs.data[n];
             }
             data.push(acc);
         }
 
-        Ok(Vector {
-            size: data.len(),
-            data,
-        })
+        Ok(Vector { data })
     }
 }
 

@@ -27,7 +27,6 @@ fn main() {
     println!("Matrix: {}", matrix);
 
     let vector = Vector {
-        size: 2,
         data: vec![5., 6.],
     };
     println!("Vector: {}", vector);
