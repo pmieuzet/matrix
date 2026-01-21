@@ -7,9 +7,7 @@ use crate::{
     vector::Vector,
 };
 
-/// Creation of a new vector by multiplying each vector by a corresponding scalar, then adding the results
-/// # Arguments
-///
+/// Creation of a new vector by multiplying each vector by a corresponding scalar, then adding the results.
 pub fn linear_combination<K>(u: &[Vector<K>], coefs: &[K]) -> Result<Vector<K>, Error>
 where
     K: Clone + std::ops::Mul<Output = K> + std::ops::Add<Output = K>,

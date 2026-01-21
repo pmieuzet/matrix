@@ -17,7 +17,7 @@ pub struct Matrix<K> {
     pub data: Vec<Vec<K>>,
 }
 
-//To print a matrix on the standart input
+//To print a matrix on the standard output
 impl<K: std::fmt::Debug> Display for Matrix<K> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{:?}", self)
@@ -43,17 +43,14 @@ impl<K> Matrix<K> {
         }
     }
 
-    //To return the size of a matrix
     pub fn size(&self) -> usize {
         self.columns * self.rows
     }
 
-    //To return the shape of a matrix
     pub fn shape(&self) -> (usize, usize) {
         (self.rows, self.columns)
     }
 
-    //To tell if a matrix is square
     pub fn is_square(&self) -> bool {
         self.rows == self.columns
     }
@@ -110,9 +107,6 @@ impl<K> Matrix<K> {
             data,
         })
     }
-
-    // TODO /// Compute the row-echelon form of the given matrix
-    // pub fn row_echelon(&self) -> Self {}
 
     fn get_sub_matrix(&self, n: usize) -> Self
     where

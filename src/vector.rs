@@ -12,7 +12,7 @@ pub struct Vector<K> {
     pub data: Vec<K>,
 }
 
-/// To print a vector on the standart outpout
+/// To print a vector on the standard output
 impl<K: std::fmt::Debug> Display for Vector<K> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{:?}", self)
@@ -30,7 +30,6 @@ impl<K> Vector<K> {
         Vector { size, data }
     }
 
-    /// To return the size of a vector
     pub fn size(&self) -> usize {
         self.size
     }
