@@ -61,6 +61,8 @@ the most usual (finite-dimensional) case.
 |:--------------------------------------:|:-------------------:|:--------------------:|
 | fused multiply-add function, pow, max  |        O(n)         |         O(n)         |
 
+<img src="assets/Three-typical-Minkowski-distances-ie-Euclidean-Manhattan-and-Chebyshev-distances.png" alt="">
+
 ## Exercise 05 - Cosine
 |      Allowed Functions      | Max time complexity | Max space complexity |
 |:---------------------------:|:-------------------:|:--------------------:|
@@ -76,7 +78,8 @@ the most usual (finite-dimensional) case.
 [Explanations](https://www.youtube.com/watch?v=eu6i7WJeinw&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab)
 
 <img src="/assets/cross-product-formule.png" alt=""/>
-
+<img src="assets/Right_hand_rule_cross_product.svg.png" alt="">
+<img src="assets/Cross_product.gif" alt="">
 
 ## Exercise 07 - Linear map, Matrix multiplication
 
