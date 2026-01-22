@@ -1,9 +1,16 @@
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, Sub, SubAssign};
+use crate::matrix::Matrix;
 
-#[derive(Clone, Debug, Copy, PartialEq)]
+#[derive(Clone, Copy, PartialEq)]
 pub struct ComplexNumber<R: RealNumber> {
     pub x: R,
     pub y: R,
+}
+
+impl<R: std::fmt::Display + RealNumber> std::fmt::Debug for ComplexNumber<R> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{} + {}i", self.x, self.y)
+    }
 }
 
 pub trait RealNumber: PartialEq + Copy + Mul + Add + Div + Sub {

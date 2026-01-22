@@ -33,10 +33,11 @@ where
         return Err(Error::WrongRangeScalar);
     }
 
+    // u + (v - u) * t
     AddSafe::add(u.clone(), MulByf32::mul(SubSafe::sub(v, u)?, t))
 }
 
-/// compute the cosine o f the angle between the two vectors u and v
+/// compute the cosine of the angle between the two vectors u and v
 pub fn angle_cos<K>(u: &Vector<K>, v: &Vector<K>) -> Result<f32, Error>
 where
     K: DivSafe + RealNumber + Mul<Output = K> + Add<Output = K>,
@@ -46,7 +47,7 @@ where
     }
 
     match u.dot(v) {
-        Err(e) => return Err(e),
+        Err(e) => Err(e),
         Ok(s) => DivSafe::div(s, u.norm() * v.norm()),
     }
 }

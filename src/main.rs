@@ -7,14 +7,12 @@ use matrix::Matrix;
 use vector::Vector;
 
 use crate::functions::{angle_cos, cross_product, lerp, linear_combination};
-use crate::projection::projection;
 
 mod complex_number;
 mod errors;
 mod functions;
 mod matrix;
 mod ops_safe;
-mod projection;
 mod tests;
 mod vector;
 
@@ -759,6 +757,16 @@ fn main() {
     }
     {
         let u: Matrix<ComplexNumber<f32>> = Matrix::from([
+            [ComplexNumber { x: 1., y: 0. }, ComplexNumber { x: 0., y: 1. }],
+            [ComplexNumber { x: 1., y: 0. }, ComplexNumber { x: 0., y: 1. }],
+        ]);
+        match u.trace() {
+            Ok(trace) => println!("{:?}", trace),
+            Err(e) => eprintln!("{e}"),
+        }
+    }
+    {
+        let u: Matrix<ComplexNumber<f32>> = Matrix::from([
             [
                 ComplexNumber { x: 2., y: 2. },
                 ComplexNumber { x: -5., y: 1. },
@@ -898,22 +906,28 @@ fn main() {
         }
     }
     {
-        // [1.0, 0.0, 0.0][0.0, 1.0, 0.0][0.0, 0.0, 1.0]
-        let u = Matrix::from([[2., 0., 0.], [0., 2., 0.], [0., 0., 2.]]);
+        let u: Matrix<ComplexNumber<f32>> = Matrix::from([
+            [
+                ComplexNumber { x: 1., y: 1. },
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 0., y: 0. },
+            ],
+            [
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 1., y: 1. },
+                ComplexNumber { x: 0., y: 0. },
+            ],
+            [
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 0., y: 0. },
+                ComplexNumber { x: 1., y: 1. },
+            ],
+        ]);
         match u.inverse() {
             Ok(inverse) => println!("{}", inverse),
             Err(e) => eprintln!("{e}"),
         }
     }
-    {
-        // [0.5, 0.0, 0.0][0.0, 0.5, 0.0][0.0, 0.0, 0.5]
-        let u = Matrix::from([[8., 5., -2.], [4., 7., 20.], [7., 6., 1.]]);
-        match u.inverse() {
-            Ok(inverse) => println!("{}", inverse),
-            Err(e) => eprintln!("{e}"),
-        }
-    }
-    // [0.649425287, 0.097701149, -0.655172414][-0.781609195, -0.126436782, 0.965517241][0.143678161, 0.074712644, -0.206896552]
 
     println!("\n\n---------------EX13---------------\n");
     {
@@ -946,10 +960,5 @@ fn main() {
         let u = Matrix::from([[8., 5., -2.], [4., 7., 20.], [7., 6., 1.], [21., 18., 7.]]);
         println!("{}", u.rank());
         // 3
-    }
-    println!("\n\n----------PROJECTION BONUS----------\n");
-    {
-        let matrix = projection(1.6, 1., 0.1, 100.);
-        println!("{}", matrix);
     }
 }
