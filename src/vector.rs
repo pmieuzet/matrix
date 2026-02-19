@@ -1,10 +1,11 @@
-use crate::{complex_number::RealNumber, errors::Error, matrix};
+use crate::{errors::Error, matrix, real_number};
 
 use matrix::Matrix;
 use std::{
     fmt::Display,
     ops::{Add, Mul, Sub},
 };
+use real_number::RealNumber;
 
 #[derive(Clone, Debug, PartialEq)]
 pub struct Vector<K> {

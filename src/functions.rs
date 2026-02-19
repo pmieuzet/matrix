@@ -1,7 +1,7 @@
 use std::ops::{Add, Mul, Sub};
 
 use crate::{
-    complex_number::RealNumber,
+    real_number::{RealNumber},
     errors::Error,
     ops_safe::{AddSafe, DivSafe, MulByf32, SubSafe},
     vector::Vector,
@@ -24,7 +24,9 @@ where
         .ok_or(Error::EmptyVector)
 }
 
-/// Linear interpolation: estimate the value of a function between two given points.
+/// This function allows you to find any point on the segment connecting two vectors. 
+/// It uses a parameter t (between 0 and 1) that acts as a cursor.
+/// If t=0, we are at the start; if t=1, we are at the end; if t=0.5, we are right in the middle.
 pub fn lerp<V>(u: V, v: V, t: f32) -> Result<V, Error>
 where
     V: AddSafe + MulByf32 + SubSafe + Clone,
@@ -37,7 +39,9 @@ where
     AddSafe::add(u.clone(), MulByf32::mul(SubSafe::sub(v, u)?, t))
 }
 
-/// compute the cosine of the angle between the two vectors u and v
+/// Compute the cosine of the angle between the two vectors u and v.
+/// Find the exact angle between two vectors, regardless of their length. We use the dot product to calculate it.
+/// This gives us a pure value between -1 and 1 that describes the exact angle between two objects.
 pub fn angle_cos<K>(u: &Vector<K>, v: &Vector<K>) -> Result<f32, Error>
 where
     K: DivSafe + RealNumber + Mul<Output = K> + Add<Output = K>,
@@ -53,6 +57,7 @@ where
 }
 
 /// Compute the cross product of two 3-dimensional vectors
+/// This operation takes two vectors and creates a third that is perpendicular to the first two.
 pub fn cross_product<K>(u: &Vector<K>, v: &Vector<K>) -> Result<Vector<K>, Error>
 where
     K: Mul<Output = K> + Sub<Output = K> + Copy,

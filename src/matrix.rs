@@ -1,4 +1,4 @@
-use crate::complex_number::RealNumber;
+use crate::real_number::RealNumber;
 use crate::{errors::Error, vector};
 use std::fmt::Debug;
 
@@ -66,7 +66,8 @@ impl<K> Matrix<K> {
         self.rows == self.columns
     }
 
-    ///  Compute the trace of the given matrix
+    /// Compute the trace: the sum of the elements located on the main diagonal of a square matrix.
+    /// It is a “signature” of the matrix that has the interesting property of not changing even if the reference frame (the basis) in which the transformation is described is changed.
     pub fn trace(&self) -> Result<K, Error>
     where
         K: AddAssign + Copy,
@@ -85,7 +86,8 @@ impl<K> Matrix<K> {
         Ok(trace)
     }
 
-    /// Compute the transpose matrix of a given matrix
+    /// Compute the transpose matrix of a given matrix.
+    /// Transposing a matrix is equivalent to inverting it with respect to its diagonal: rows become columns and vice versa.
     pub fn transpose(&self) -> Result<Self, Error>
     where
         K: Copy,
@@ -131,7 +133,9 @@ impl<K> Matrix<K> {
         }
     }
 
-    /// Compute the determinant of the given matrix
+    /// Compute the determinant of the given matrix.
+    /// The determinant is a number that indicates how the matrix transformation changes volumes (or areas in 2D).
+    /// If it is 2, the matrix doubles the volume. If it is 0, the matrix “flattens” the volume, which means that the information is lost and the transformation is irreversible.
     pub fn determinant(&self) -> Result<K, Error>
     where
         K: Mul<Output = K> + RealNumber + Sub<Output = K> + Copy + AddAssign + SubAssign,
@@ -198,6 +202,8 @@ impl<K> Matrix<K> {
     }
 
     /// Compute the row echelon
+    /// The goal is to simplify a matrix so that it takes on a triangular shape (with zeros in the lower left corner).
+    /// This corresponds to the Gaussian elimination method: unknowns in a system of equations are gradually eliminated so that it can be easily solved, step by step.
     pub fn row_echelon(&self) -> Matrix<K>
     where
         K: Div<f32, Output = K>
@@ -259,6 +265,10 @@ impl<K> Matrix<K> {
         matrix
     }
 
+    /// Compute the inverse of the matrix.
+    /// The inverse of a matrix A is the matrix A−1, which cancels out the effect of A, returning us to the initial state.
+    /// Calculating the inverse allows you to “divide” by a matrix, which is necessary to solve systems of equations of the type Ax=b by finding x=A−1b.
+    /// It is impossible if the determinant is 0 (because you can't give volume back to a flat surface).
     pub fn inverse(&self) -> Result<Matrix<K>, Error>
     where
         K: Mul<Output = K>
@@ -327,6 +337,8 @@ impl<K> Matrix<K> {
         Ok(identity)
     }
 
+    /// Compute the rank of the matrix.
+    /// The rank indicates the number of real dimensions that the matrix retains after transformation.
     pub fn rank(&self) -> usize
     where
         K: Div<f32, Output = K>
